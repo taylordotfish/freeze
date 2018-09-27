@@ -1,0 +1,7 @@
+*.o
+*.d
+*.so
+*.swp
+build/
+_build/
+FreezeDB-TEST

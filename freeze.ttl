@@ -1,0 +1,90 @@
+# Copyright (C) 2018 taylor.fish <contact@taylor.fish>
+#
+# This file is part of Freeze.
+#
+# Freeze is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Freeze is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
+
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+@prefix ui: <http://lv2plug.in/ns/extensions/ui#> .
+@prefix urid: <http://lv2plug.in/ns/ext/urid#> .
+@prefix time: <http://lv2plug.in/ns/ext/time#> .
+
+<https://taylor.fish/plugins/freeze>
+    doap:name "Freeze" ;
+    doap:license <https://www.gnu.org/licenses/gpl-3.0.txt> ;
+    doap:developer [
+        a foaf:Person ;
+        foaf:name "taylor.fish" ;
+        foaf:mbox <mailto:contact@taylor.fish> ;
+    ] ;
+
+    lv2:requiredFeature urid:map ;
+    lv2:optionalFeature lv2:hardRTCapable ;
+    lv2:extensionData state:interface ;
+    ui:ui <https://taylor.fish/plugins/freeze#ui> ;
+
+    lv2:port [
+        a lv2:AudioPort ,
+          lv2:InputPort ;
+        lv2:index 0 ;
+        lv2:symbol "in0" ;
+        lv2:name "InL"
+    ] , [
+        a lv2:AudioPort ,
+          lv2:InputPort ;
+        lv2:index 1 ;
+        lv2:symbol "in1" ;
+        lv2:name "InR"
+    ] , [
+        a lv2:AudioPort ,
+          lv2:OutputPort ;
+        lv2:index 2 ;
+        lv2:symbol "out0" ;
+        lv2:name "OutL"
+    ] , [
+        a lv2:AudioPort ,
+          lv2:OutputPort ;
+        lv2:index 3 ;
+        lv2:symbol "out1" ;
+        lv2:name "OutR"
+    ] , [
+        a lv2:InputPort ,
+          atom:AtomPort ;
+        atom:bufferType atom:Sequence ;
+        atom:supports time:Position ;
+        lv2:designation lv2:control ;
+        lv2:index 4 ;
+        lv2:symbol "control" ;
+        lv2:name "Control"
+    ] , [
+        a lv2:OutputPort ,
+          atom:AtomPort ;
+        atom:bufferType atom:Sequence ;
+        lv2:designation lv2:control ;
+        lv2:index 5 ;
+        lv2:symbol "notify" ;
+        lv2:name "Notify"
+    ] .
+
+<https://taylor.fish/plugins/freeze#ui>
+    lv2:requiredFeature urid:map ;
+    ui:portNotification [
+        ui:plugin <https://taylor.fish/plugins/freeze> ;
+        lv2:symbol "notify" ;
+        ui:notifyType atom:Blank
+    ] .

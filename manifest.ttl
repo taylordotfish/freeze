@@ -1,0 +1,32 @@
+# Copyright (C) 2018 taylor.fish <contact@taylor.fish>
+#
+# This file is part of Freeze.
+#
+# Freeze is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Freeze is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
+
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ui: <http://lv2plug.in/ns/extensions/ui#> .
+
+<https://taylor.fish/plugins/freeze>
+	a lv2:Plugin ;
+    lv2:minorVersion 1 ;
+    lv2:microVersion 0 ;
+	lv2:binary <build/freeze.so> ;
+	rdfs:seeAlso <freeze.ttl> .
+
+<https://taylor.fish/plugins/freeze#ui>
+    a ui:GtkUI ;
+	ui:binary <build/freeze_ui.so> ;
+	rdfs:seeAlso <freeze.ttl> .
