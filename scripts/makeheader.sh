@@ -18,6 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+set -e
+
 if ! which autoheaders > /dev/null; then
     echo >&2 "Could not find autoheaders (is it installed?)."
     echo >&2 "See <https://git.taylor.fish/taylor.fish/autoheaders>."
@@ -37,11 +39,19 @@ if [ $# -ne 1 ]; then
     usage
 fi
 
-script_dir=$(dirname "$0")
+script_dir=$(realpath "$(dirname "$0")")
 ah_opts=(-c-I"$script_dir/../src")
 base=${1%.c}
 
-autoheaders "$1" "${ah_opts[@]}" > "$base".h
+tmpfile=$(mktemp)
+if ! autoheaders "$1" "${ah_opts[@]}" > "$tmpfile"; then
+    rm -f "$tmpfile"
+    exit 1
+fi
+
+mv "$tmpfile" "$base".h
+chmod +rw "$base".h
+
 if [ -f "$base".priv.h ]; then
     autoheaders "$1" -p "${ah_opts[@]}" > "$base".priv.h
 fi
