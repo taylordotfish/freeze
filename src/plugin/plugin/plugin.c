@@ -31,14 +31,6 @@
     #include "shared/logger/logger.h"
     #include "shared/mode/mode.h"
 
-    typedef void (*FreezeScheduleWorkFunc)(
-        void *context, const void *data, size_t size
-    );
-
-    typedef void (*FreezeWorkRespondFunc)(
-        void *context, const void *data, size_t size
-    );
-
     typedef struct FreezePlugin {
         bool active;
         Recording recording;
@@ -57,11 +49,7 @@
 
 void freeze_plugin_init(FreezePlugin *self, FreezeClient *client) {
     recording_init(&self->recording);
-    freeze_plugin_reset_state(self);
     self->db_path = NULL;
-    self->frame = 0;
-    self->mode = FREEZE_MODE_PLAYING;
-    self->playing = false;
 
     self->client = client;
     self->logger = &plugin_logger_fallback;
@@ -69,6 +57,7 @@ void freeze_plugin_init(FreezePlugin *self, FreezeClient *client) {
     FREEZE_CLIENT_ADD_CALLBACK(client, ON_GET, on_client_get, self);
     FREEZE_CLIENT_ADD_CALLBACK(client, ON_MODE, on_client_mode, self);
     FREEZE_CLIENT_ADD_CALLBACK(client, ON_CLEAR_DB, on_client_clear_db, self);
+    freeze_plugin_reset_state(self);
 }
 
 const char *freeze_plugin_get_db_path(const FreezePlugin *self) {
@@ -110,6 +99,7 @@ void freeze_plugin_on_state_save(FreezePlugin *self) {
 static void freeze_plugin_reset_state(FreezePlugin *self) {
     self->frame = 0;
     self->mode = FREEZE_MODE_PLAYING;
+    self->playing = false;
 }
 
 void freeze_plugin_activate(FreezePlugin *self) {
@@ -190,6 +180,9 @@ static void on_client_get(void *context, void *unused) {
 
 static void on_client_mode(void *context, FreezeRecordingMode mode) {
     FreezePlugin *self = context;
+    plugin_log_trace(
+        self->logger, "Received request to change mode to %d.", mode
+    );
     self->mode = mode;
     freeze_client_set_mode(self->client, self->mode);
     freeze_client_set_mem_used(
@@ -199,6 +192,7 @@ static void on_client_mode(void *context, FreezeRecordingMode mode) {
 
 static void on_client_clear_db(void *context, void *unused) {
     FreezePlugin *self = context;
+    plugin_log_trace(self->logger, "Received request to clear DB.");
     recording_clear(&self->recording);
     freeze_client_set_mem_used(
         self->client, recording_get_memory_used(&self->recording)

@@ -7,18 +7,11 @@
 #include "shared/logger/logger.h"
 #include "shared/mode/mode.h"
 
-typedef void (*FreezeScheduleWorkFunc)(
-    void *context, const void *data, size_t size
-);
-
-typedef void (*FreezeWorkRespondFunc)(
-    void *context, const void *data, size_t size
-);
-
 typedef struct FreezePlugin {
     bool active;
     Recording recording;
     char *db_path;
+
     uint_least32_t frame;
     FreezeRecordingMode mode;
     bool playing;
