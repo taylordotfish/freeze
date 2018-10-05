@@ -132,6 +132,7 @@ static void recording_chunk_prepare_for_write(RecordingChunk *self) {
 
 void recording_init(Recording *self) {
     recording_clear(self);
+    self->cleared = false;
     self->logger = &plugin_logger_fallback;
 }
 
