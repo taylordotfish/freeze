@@ -20,38 +20,56 @@
 
 set -e
 
+NOT_FOUND_MSG='
+Could not find autoheaders (is it installed?).
+See <https://git.taylor.fish/taylor.fish/autoheaders>.
+'
+
+USAGE_MSG='
+Usage: makeheader.sh <c-file>
+
+If "file.c" is given, this will create "file.h". If "file.priv.h" exists
+before running this script, it will be replaced with a private header.
+'
+
+VERSION_MSG='
+autoheaders must be at least version 0.3.0. Please update autoheaders.
+See <http://git.taylor.fish/taylor.fish/autoheaders>.
+'
+
 if ! which autoheaders > /dev/null; then
-    echo >&2 "Could not find autoheaders (is it installed?)."
-    echo >&2 "See <https://git.taylor.fish/taylor.fish/autoheaders>."
+    echo >&2 -n "${NOT_FOUND_MSG:1}"
     exit 1
 fi
 
 usage() {
-    echo "Usage: makeheader.sh <c-file>"
-    echo
-    echo 'If "file.c" is given, this will create "file.h".'
-    echo 'If "file.priv.h" exists before running this script,'
-    echo 'it will be replaced with a private header.'
+    echo -n "${USAGE_MSG:1}"
     exit 1
+}
+
+check-version() {
+    local ah_version=$(autoheaders --version 2>/dev/null)
+    local ah_major_version=$(grep -oP '^\d+' <<< "$ah_version")
+    local ah_minor_version=$(grep -oP '^\d+\.\K\d+' <<< "$ah_version")
+    [ "$ah_major_version" -gt 0 ] && return 0
+    [ "$ah_minor_version" -ge 3 ] && return 0
+    echo >&2 -n "${VERSION_MSG:1}"
+    return 1
 }
 
 if [ $# -ne 1 ]; then
     usage
 fi
 
-script_dir=$(realpath "$(dirname "$0")")
-ah_opts=(-c-I"$script_dir/../src")
 base=${1%.c}
-
-tmpfile=$(mktemp)
-if ! autoheaders "$1" "${ah_opts[@]}" > "$tmpfile"; then
-    rm -f "$tmpfile"
-    exit 1
-fi
-
-mv "$tmpfile" "$base".h
-chmod +rw "$base".h
+script_dir=$(realpath "$(dirname "$0")")
+ah_opts=("$1" -c-I"$script_dir"/../src -o "$base".h)
 
 if [ -f "$base".priv.h ]; then
-    autoheaders "$1" -p "${ah_opts[@]}" > "$base".priv.h
+    ah_opts+=(-p -o "$base".priv.h)
+fi
+
+if ! autoheaders "${ah_opts[@]}"; then
+    check-version
+    exit 1
 fi
