@@ -24,14 +24,16 @@
 @prefix urid: <http://lv2plug.in/ns/ext/urid#> .
 @prefix time: <http://lv2plug.in/ns/ext/time#> .
 
+<https://taylor.fish/self>
+    a foaf:Person ;
+    foaf:name "taylor.fish" ;
+    foaf:mbox <mailto:contact@taylor.fish> .
+
 <https://taylor.fish/plugins/freeze>
     doap:name "Freeze" ;
     doap:license <https://www.gnu.org/licenses/gpl-3.0.txt> ;
-    doap:developer [
-        a foaf:Person ;
-        foaf:name "taylor.fish" ;
-        foaf:mbox <mailto:contact@taylor.fish> ;
-    ] ;
+    doap:developer <https://taylor.fish/self> ;
+    doap:maintainer <https://taylor.fish/self> ;
 
     lv2:requiredFeature urid:map ;
     lv2:optionalFeature lv2:hardRTCapable ;
