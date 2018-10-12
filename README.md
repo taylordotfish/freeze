@@ -23,7 +23,7 @@ is not necessary to play sections where the track is silent, even if other
 tracks aren’t.
 
 After all sections have been played back, click the Stop button in the GUI.
-The "Memory Used" text at the bottom of the GUI should update, showing you
+The “Memory Used” text at the bottom of the GUI should update, showing you
 how much memory is being used to store the recorded audio. This amount of
 memory is present both in RAM and on disk.
 
