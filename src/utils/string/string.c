@@ -24,8 +24,6 @@
 // @guard UTILS__STRING_H
 
 #include "string.h"
-#include "../memory/memory.h"
-
 #include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
@@ -48,9 +46,9 @@ char *strdup_or_abort(const char *str) {
     if (str == NULL) {
         return NULL;
     }
-    char *result = malloc_or_abort(strlen(str) + 1);
+    char *result = malloc(strlen(str) + 1);
     if (result == NULL) {
-        fprintf(stderr, "Error calling strdup(): memory allocation failed.\n");
+        fprintf(stderr, "strdup(): Memory allocation failed.\n");
         abort();
     }
     strcpy(result, str);
@@ -70,6 +68,10 @@ char *vsprintf_heap(const char *format, va_list args) {
     size_t length = vsnprintf(NULL, 0, format, args);
 
     char *result = malloc(length + 1);
+    if (result == NULL) {
+        fprintf(stderr, "vsprintf_heap(): Memory allocation failed.\n");
+        abort();
+    }
     vsnprintf(result, length + 1, format, args_copy);
     va_end(args_copy);
     return result;
