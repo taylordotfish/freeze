@@ -62,7 +62,7 @@ Installation
 Run the following commands (you will need to have [Git] installed):
 
 ```
-git clone https://git.taylor.fish/git/freeze ~/.lv2/freeze.lv2/
+git clone https://git.taylor.fish/taylor.fish/freeze ~/.lv2/freeze.lv2/
 cd ~/.lv2/freeze.lv2/
 make
 ```
