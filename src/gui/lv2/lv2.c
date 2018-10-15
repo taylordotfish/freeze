@@ -123,10 +123,10 @@ static void port_event(
 
 static void cleanup(LV2UI_Handle handle) {
     FreezeLV2UI *self = (FreezeLV2UI *)handle;
-    app_view_free(&self->view);
-    app_pm_free(&self->pmod);
-    app_model_free(&self->model);
-    freeze_client_free(&self->client);
+    app_view_destroy(&self->view);
+    app_pm_destroy(&self->pmod);
+    app_model_destroy(&self->model);
+    freeze_client_destroy(&self->client);
     free(self);
 }
 

@@ -65,6 +65,6 @@ void app_model_set_memory_used(AppModel *self, size_t memory_used) {
     self->memory_used = memory_used;
 }
 
-void app_model_free(AppModel *self) {
+void app_model_destroy(AppModel *self) {
     free(self->path);
 }

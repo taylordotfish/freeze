@@ -60,6 +60,6 @@ void db_path_pm_set_sync(DBPathPM *self, void *context, void (*sync)(void *)) {
     self->sync = sync;
 }
 
-void db_path_pm_free(DBPathPM *self) {
+void db_path_pm_destroy(DBPathPM *self) {
     free(self->path);
 }

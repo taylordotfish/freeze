@@ -92,9 +92,9 @@ int main(int argc, char **argv) {
     g_signal_connect(window, "destroy", G_CALLBACK(on_destroy), NULL);
 
     gtk_main();
-    app_view_free(&view);
-    app_pm_free(&pm);
-    app_model_free(&model);
-    freeze_client_free(&client);
+    app_view_destroy(&view);
+    app_pm_destroy(&pm);
+    app_model_destroy(&model);
+    freeze_client_destroy(&client);
     return 0;
 }

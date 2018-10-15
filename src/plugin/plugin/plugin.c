@@ -154,8 +154,8 @@ void freeze_plugin_set_logger(FreezePlugin *self, const PluginLogger *logger) {
     recording_set_logger(&self->recording, logger);
 }
 
-void freeze_plugin_free(FreezePlugin *self) {
-    recording_free(&self->recording);
+void freeze_plugin_destroy(FreezePlugin *self) {
+    recording_destroy(&self->recording);
     free(self->db_path);
 }
 

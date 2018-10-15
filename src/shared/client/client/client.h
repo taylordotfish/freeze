@@ -42,7 +42,7 @@ void freeze_client_on_event(FreezeClient *self, const LV2_Atom *atom);
 void freeze_client_set_logger(
     FreezeClient *self, const PluginLogger *logger);
 
-void freeze_client_free(FreezeClient *self);
+void freeze_client_destroy(FreezeClient *self);
 
 #define FREEZE_CLIENT_ADD_CALLBACK(self, ...) do { \
     FREEZE_CLIENT_CALLBACKS_ADD(&(self)->callbacks, __VA_ARGS__); \

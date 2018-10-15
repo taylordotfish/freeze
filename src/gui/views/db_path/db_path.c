@@ -68,5 +68,5 @@ static void db_path_view_sync(void *context) {
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-void db_path_view_free(DBPathView *self) {
+void db_path_view_destroy(DBPathView *self) {
 }

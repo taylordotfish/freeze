@@ -371,7 +371,7 @@ static void recording_free_samples(Recording *self) {
     }
 }
 
-void recording_free(Recording *self) {
+void recording_destroy(Recording *self) {
     recording_free_samples(self);
 }
 

@@ -16,6 +16,6 @@ void db_path_view_init(DBPathView *self, DBPathPM *pmod);
 
 GtkWidget *db_path_view_widget(const DBPathView *self);
 
-void db_path_view_free(DBPathView *self);
+void db_path_view_destroy(DBPathView *self);
 
 #endif

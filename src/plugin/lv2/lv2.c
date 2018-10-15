@@ -259,8 +259,8 @@ static void run(LV2_Handle instance, uint32_t sample_count) {
 
 static void cleanup(LV2_Handle instance) {
     FreezeLV2 *self = (FreezeLV2 *)instance;
-    freeze_plugin_free(&self->plugin);
-    freeze_client_free(&self->client);
+    freeze_plugin_destroy(&self->plugin);
+    freeze_client_destroy(&self->client);
     free(self);
 }
 

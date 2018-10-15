@@ -54,12 +54,12 @@ void freeze_client_callbacks_init(FreezeClientCallbacks *self) {
     callback_list_init(&self->ON_GET);
 }
 
-void freeze_client_callbacks_free(FreezeClientCallbacks *self) {
-    callback_list_free(&self->ON_MODE);
-    callback_list_free(&self->ON_PATH);
-    callback_list_free(&self->ON_MEM_USED);
-    callback_list_init(&self->ON_CLEAR_DB);
-    callback_list_free(&self->ON_GET);
+void freeze_client_callbacks_destroy(FreezeClientCallbacks *self) {
+    callback_list_destroy(&self->ON_MODE);
+    callback_list_destroy(&self->ON_PATH);
+    callback_list_destroy(&self->ON_MEM_USED);
+    callback_list_destroy(&self->ON_CLEAR_DB);
+    callback_list_destroy(&self->ON_GET);
 }
 
 #ifdef HEADER

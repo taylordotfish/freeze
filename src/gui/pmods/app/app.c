@@ -91,9 +91,9 @@ void app_pm_set_sync(AppPM *self, void *context, void (*sync)(void *)) {
     self->sync = sync;
 }
 
-void app_pm_free(AppPM *self) {
-    db_path_pm_free(&self->db_path);
-    record_buttons_pm_free(&self->record_buttons);
+void app_pm_destroy(AppPM *self) {
+    db_path_pm_destroy(&self->db_path);
+    record_buttons_pm_destroy(&self->record_buttons);
 }
 
 

@@ -24,6 +24,6 @@ void app_pm_sync(AppPM *self);
 
 void app_pm_set_sync(AppPM *self, void *context, void (*sync)(void *));
 
-void app_pm_free(AppPM *self);
+void app_pm_destroy(AppPM *self);
 
 #endif

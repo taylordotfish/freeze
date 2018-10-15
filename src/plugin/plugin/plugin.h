@@ -48,6 +48,6 @@ void freeze_plugin_run(
 
 void freeze_plugin_set_logger(FreezePlugin *self, const PluginLogger *logger);
 
-void freeze_plugin_free(FreezePlugin *self);
+void freeze_plugin_destroy(FreezePlugin *self);
 
 #endif

@@ -104,5 +104,5 @@ void record_buttons_pm_set_callbacks(
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-void record_buttons_pm_free(RecordButtonsPM *self) {
+void record_buttons_pm_destroy(RecordButtonsPM *self) {
 }

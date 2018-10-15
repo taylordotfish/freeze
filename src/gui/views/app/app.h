@@ -20,6 +20,6 @@ void app_view_init(AppView *self, AppPM *pmod);
 
 GtkWidget *app_view_widget(const AppView *self);
 
-void app_view_free(AppView *self);
+void app_view_destroy(AppView *self);
 
 #endif

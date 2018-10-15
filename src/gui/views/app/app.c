@@ -86,6 +86,7 @@ static void app_view_sync(void *context) {
     free(str);
 }
 
-void app_view_free(AppView *self) {
-    db_path_view_free(&self->db_path);
+void app_view_destroy(AppView *self) {
+    db_path_view_destroy(&self->db_path);
+    record_buttons_view_destroy(&self->record_buttons);
 }

@@ -89,6 +89,6 @@ int main(void) {
     freeze_plugin_run(&plugin, input2, output);
 
     freeze_plugin_save_db(&plugin);
-    freeze_plugin_free(&plugin);
+    freeze_plugin_destroy(&plugin);
     return 0;
 }

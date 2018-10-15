@@ -18,6 +18,6 @@ void record_buttons_view_init(RecordButtonsView *self, RecordButtonsPM *pmod);
 
 GtkWidget *record_buttons_view_widget(const RecordButtonsView *self);
 
-void record_buttons_view_free(RecordButtonsView *self);
+void record_buttons_view_destroy(RecordButtonsView *self);
 
 #endif

@@ -243,7 +243,7 @@ void *array_list_get_array(const ArrayList *self) {
  * @param[in] self The ArrayList.
  */
 void array_list_clear(ArrayList *self) {
-    array_list_free(self);
+    array_list_destroy(self);
     array_list_reset(self);
 }
 
@@ -254,6 +254,6 @@ void array_list_clear(ArrayList *self) {
  *
  * @param[in] self The ArrayList.
  */
-void array_list_free(ArrayList *self) {
+void array_list_destroy(ArrayList *self) {
     free(self->data);
 }

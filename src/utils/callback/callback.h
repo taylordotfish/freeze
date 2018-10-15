@@ -42,7 +42,7 @@ void callback_list_add(CallbackList *self, void (*func)(), void *context);
  *
  * @param[in] self The CallbackList.
  */
-void callback_list_free(CallbackList *self);
+void callback_list_destroy(CallbackList *self);
 
 /**
  * Adds a callback to a CallbackList.

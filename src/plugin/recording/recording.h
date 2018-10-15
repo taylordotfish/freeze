@@ -42,6 +42,6 @@ size_t recording_get_memory_used(const Recording *self);
 
 void recording_set_logger(Recording *self, const PluginLogger *logger);
 
-void recording_free(Recording *self);
+void recording_destroy(Recording *self);
 
 #endif

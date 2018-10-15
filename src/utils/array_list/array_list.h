@@ -118,6 +118,6 @@ void array_list_clear(ArrayList *self);
  *
  * @param[in] self The ArrayList.
  */
-void array_list_free(ArrayList *self);
+void array_list_destroy(ArrayList *self);
 
 #endif

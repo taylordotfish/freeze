@@ -44,6 +44,6 @@ void record_buttons_pm_set_callbacks(
     RecordButtonsPM *self, void *context,
     RecordButtonsPMOnChange on_change, RecordButtonsPMOnClear on_clear);
 
-void record_buttons_pm_free(RecordButtonsPM *self);
+void record_buttons_pm_destroy(RecordButtonsPM *self);
 
 #endif

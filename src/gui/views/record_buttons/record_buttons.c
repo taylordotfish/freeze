@@ -105,7 +105,7 @@ static void record_buttons_view_sync(void *context) {
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-void record_buttons_view_free(RecordButtonsView *self) {
+void record_buttons_view_destroy(RecordButtonsView *self) {
 }
 
 

@@ -291,8 +291,8 @@ void freeze_client_set_logger(
     self->logger = logger;
 }
 
-void freeze_client_free(FreezeClient *self) {
-    freeze_client_callbacks_free(&self->callbacks);
+void freeze_client_destroy(FreezeClient *self) {
+    freeze_client_callbacks_destroy(&self->callbacks);
 }
 
 #ifdef HEADER

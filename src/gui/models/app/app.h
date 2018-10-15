@@ -25,6 +25,6 @@ size_t app_model_get_memory_used(const AppModel *self);
 
 void app_model_set_memory_used(AppModel *self, size_t memory_used);
 
-void app_model_free(AppModel *self);
+void app_model_destroy(AppModel *self);
 
 #endif

@@ -25,7 +25,7 @@ typedef struct FreezeClientCallbacks {
 
 void freeze_client_callbacks_init(FreezeClientCallbacks *self);
 
-void freeze_client_callbacks_free(FreezeClientCallbacks *self);
+void freeze_client_callbacks_destroy(FreezeClientCallbacks *self);
 
 #define FREEZE_CLIENT_CALLBACKS_ADD(self, cb_type, func, context) do { \
     CALLBACK_LIST_ADD(&(self)->cb_type, func, context); \

@@ -74,8 +74,8 @@ void callback_list_add(CallbackList *self, void (*func)(), void *context) {
  *
  * @param[in] self The CallbackList.
  */
-void callback_list_free(CallbackList *self) {
-    array_list_free(&self->list);
+void callback_list_destroy(CallbackList *self) {
+    array_list_destroy(&self->list);
 }
 
 #ifdef HEADER
