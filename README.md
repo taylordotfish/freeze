@@ -3,8 +3,8 @@ Freeze
 
 Version 0.1.2
 
-Freeze is an LV2 plugin for freezing tracks in a digital audio workstation;
-i.e., temporarily rendering a track as audio to reduce CPU/DSP load, as tracks
+Freeze is an LV2 plugin for freezing tracks in a digital audio workstation—that
+is, temporarily rendering a track as audio to reduce CPU/DSP load, as tracks
 with large chains of CPU-heavy effects can make [buffer underruns][0] (xruns)
 quite common. Some DAWs like Ardour support track freezing to a certain extent,
 but Ardour, for example, cannot freeze MIDI tracks.
