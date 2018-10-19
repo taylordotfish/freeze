@@ -20,13 +20,13 @@
 #ifndef FREEZE__SHARED__PORTS_H
 #define FREEZE__SHARED__PORTS_H
 
-typedef enum FreezeLV2Ports {
+typedef enum FreezeLV2Port {
     FREEZE_LV2_PORT_IN_L = 0,
     FREEZE_LV2_PORT_IN_R = 1,
     FREEZE_LV2_PORT_OUT_L = 2,
     FREEZE_LV2_PORT_OUT_R = 3,
     FREEZE_LV2_PORT_CONTROL = 4,
     FREEZE_LV2_PORT_NOTIFY = 5,
-} FreezeLV2Ports;
+} FreezeLV2Port;
 
 #endif
