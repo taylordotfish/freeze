@@ -17,8 +17,8 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SHARED__MODE_H
-#define SHARED__MODE_H
+#ifndef FREEZE__SHARED__MODE_H
+#define FREEZE__SHARED__MODE_H
 
 typedef enum FreezeRecordingMode {
     FREEZE_MODE_PLAYING = 0,

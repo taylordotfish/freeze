@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard SHARED__STUBS_H
+// @guard FREEZE__SHARED__STUBS_H
 
 #include "stubs.h"
 #include "stubs.priv.h"
@@ -66,8 +66,18 @@ static LV2_URID stub_map_func(LV2_URID_Map_Handle handle, const char *uri) {
     return pair->urid;
 }
 
+static void stub_map_destroy(StubURIDMap *self) {
+    array_list_destroy(&self->list);
+}
+
 LV2_URID_Map *freeze_stub_make_urid_map(void) {
     StubURIDMap *map = malloc_or_abort(sizeof(StubURIDMap));
     stub_urid_map_init(map);
     return &map->lv2_map;
+}
+
+void freeze_stub_free_urid_map(LV2_URID_Map *map) {
+    StubURIDMap *stub = (StubURIDMap *)map->handle;
+    stub_map_destroy(stub);
+    free(stub);
 }

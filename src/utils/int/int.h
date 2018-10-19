@@ -21,8 +21,8 @@
  * Integer manipulation utilities.
  */
 
-#ifndef UTILS__INT_H
-#define UTILS__INT_H
+#ifndef FREEZE__UTILS__INT_H
+#define FREEZE__UTILS__INT_H
 
 #include <limits.h>
 #include <stddef.h>

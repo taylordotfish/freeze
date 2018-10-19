@@ -1,5 +1,5 @@
-#ifndef SHARED__CLIENT__CALLBACKS_H
-#define SHARED__CLIENT__CALLBACKS_H
+#ifndef FREEZE__SHARED__CLIENT__CALLBACKS_H
+#define FREEZE__SHARED__CLIENT__CALLBACKS_H
 
 #include "utils/callback/callback.h"
 #include "shared/mode/mode.h"

@@ -17,8 +17,8 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLUGIN__STEREO_SLICE_H
-#define PLUGIN__STEREO_SLICE_H
+#ifndef FREEZE__PLUGIN__SAMPLES_H
+#define FREEZE__PLUGIN__SAMPLES_H
 
 #include <stddef.h>
 

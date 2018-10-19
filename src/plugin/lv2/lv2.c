@@ -17,11 +17,10 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard PLUGIN__LV2_H
+// @guard FREEZE__PLUGIN__LV2_H
 
 #include "lv2.h"
 #include "lv2.priv.h"
-#include "utils/memory/memory.h"
 #include "shared/lv2_util/lv2_util.h"
 #include "shared/ports/ports.h"
 
@@ -52,7 +51,9 @@
 #endif
 
 #ifdef PRIVATE_HEADER
+    #include <lv2/lv2plug.in/ns/ext/atom/atom.h>
     #include <lv2/lv2plug.in/ns/ext/state/state.h>
+    #include <lv2/lv2plug.in/ns/lv2core/lv2.h>
 #endif
 
 #define FREEZE_DB_NAME "FreezeDB"
@@ -75,7 +76,11 @@ static void write_atom(void *context, const LV2_Atom *atom) {
 static LV2_Handle instantiate(
         const LV2_Descriptor *descriptor, double sample_rate,
         const char *bundle_path, const LV2_Feature * const *features) {
-    FreezeLV2 *self = malloc_or_abort(sizeof(FreezeLV2));
+    FreezeLV2 *self = malloc(sizeof(FreezeLV2));
+    if (self == NULL) {
+        return NULL;
+    }
+
     plugin_logger_fallback.name = "Freeze/fallback";
     self->logger = plugin_logger_fallback;
     self->notify_port = NULL;
@@ -208,6 +213,24 @@ static void update_position(FreezeLV2 *self, const LV2_Atom_Object *obj) {
     freeze_plugin_set_speed(&self->plugin, speed);
 }
 
+static void handle_atom_event(FreezeLV2 *self, const LV2_Atom_Event *event) {
+    uint_least32_t event_type = event->body.type;
+    if (!lv2_atom_forge_is_object_type(&self->notify_forge, event_type)) {
+        plugin_log_warn(
+            &self->logger, "Control port received non-object atom."
+        );
+        return;
+    }
+
+    const LV2_Atom_Object *obj = (const LV2_Atom_Object *)&event->body;
+    if (obj->body.otype == self->uris.time_Position) {
+        update_position(self, obj);
+        return;
+    }
+
+    freeze_client_on_event(&self->client, &event->body);
+}
+
 static void run(LV2_Handle instance, uint32_t sample_count) {
     FreezeLV2 *self = (FreezeLV2 *)instance;
     uint_least32_t notify_capacity = self->notify_port->atom.size;
@@ -231,28 +254,14 @@ static void run(LV2_Handle instance, uint32_t sample_count) {
         input.length = event->time.frames - current_frame;
         current_frame = event->time.frames;
         freeze_plugin_run(&self->plugin, input, output);
+        handle_atom_event(self, event);
 
         input.left += input.length;
         input.right += input.length;
         output.left += input.length;
         output.right += input.length;
-
-        uint_least32_t event_type = event->body.type;
-        if (!lv2_atom_forge_is_object_type(&self->notify_forge, event_type)) {
-            plugin_log_warn(
-                &self->logger, "Control port received non-object atom."
-            );
-            continue;
-        }
-
-        const LV2_Atom_Object *obj = (const LV2_Atom_Object *)&event->body;
-        if (obj->body.otype == self->uris.time_Position) {
-            update_position(self, obj);
-            continue;
-        }
-
-        freeze_client_on_event(&self->client, &event->body);
     }
+
     input.length = sample_count - current_frame;
     freeze_plugin_run(&self->plugin, input, output);
 }

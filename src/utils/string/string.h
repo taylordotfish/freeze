@@ -1,5 +1,5 @@
-#ifndef UTILS__STRING_H
-#define UTILS__STRING_H
+#ifndef FREEZE__UTILS__STRING_H
+#define FREEZE__UTILS__STRING_H
 
 #include <stdarg.h>
 #include <stdbool.h>

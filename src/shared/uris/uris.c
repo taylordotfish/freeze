@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard SHARED__URIS_H
+// @guard FREEZE__SHARED__URIS_H
 
 #include "uris.h"
 #include <lv2/lv2plug.in/ns/ext/atom/atom.h>

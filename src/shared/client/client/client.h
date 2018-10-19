@@ -1,5 +1,5 @@
-#ifndef SHARED__CLIENT__CLIENT_H
-#define SHARED__CLIENT__CLIENT_H
+#ifndef FREEZE__SHARED__CLIENT__CLIENT_H
+#define FREEZE__SHARED__CLIENT__CLIENT_H
 
 #include "../callbacks/callbacks.h"
 #include "shared/logger/logger.h"

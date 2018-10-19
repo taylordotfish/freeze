@@ -1,5 +1,5 @@
-#ifndef PLUGIN__RECORDING_H
-#define PLUGIN__RECORDING_H
+#ifndef FREEZE__PLUGIN__RECORDING_H
+#define FREEZE__PLUGIN__RECORDING_H
 
 #include "../samples/samples.h"
 #include "shared/logger/logger.h"

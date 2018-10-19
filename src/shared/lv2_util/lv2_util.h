@@ -20,8 +20,8 @@
  * original.
  */
 
-#ifndef SHARED__LV2_UTIL_H
-#define SHARED__LV2_UTIL_H
+#ifndef FREEZE__SHARED__LV2_UTIL_H
+#define FREEZE__SHARED__LV2_UTIL_H
 
 #include <string.h>
 #include <stdbool.h>
@@ -33,7 +33,7 @@
  * only useful for features with data, and can not detect features that are
  * present but have NULL data.
  */
-static inline void* lv2_features_data(
+static inline void *lv2_features_data(
         const LV2_Feature * const *features, const char *uri) {
     if (features) {
         for (const LV2_Feature * const *f = features; *f; ++f) {
@@ -75,8 +75,8 @@ static inline const char *lv2_features_query(
     const char *uri = NULL;
     const char *missing = NULL;
 
-    while ((uri = va_arg(args, const char*))) {
-        void **data = va_arg(args, void**);
+    while ((uri = va_arg(args, const char *))) {
+        void **data = va_arg(args, void **);
         bool required = va_arg(args, int);
 
         *data = lv2_features_data(features, uri);

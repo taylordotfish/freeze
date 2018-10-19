@@ -1,5 +1,5 @@
-#ifndef PLUGIN__LV2_H
-#define PLUGIN__LV2_H
+#ifndef FREEZE__PLUGIN__LV2_H
+#define FREEZE__PLUGIN__LV2_H
 
 #include "../plugin/plugin.h"
 #include "shared/logger/logger.h"

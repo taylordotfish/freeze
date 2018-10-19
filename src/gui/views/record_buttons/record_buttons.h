@@ -1,5 +1,5 @@
-#ifndef GUI__VIEWS__RECORD_BUTTONS_H
-#define GUI__VIEWS__RECORD_BUTTONS_H
+#ifndef FREEZE__GUI__VIEWS__RECORD_BUTTONS_H
+#define FREEZE__GUI__VIEWS__RECORD_BUTTONS_H
 
 #include "../widgets/widgets.h"
 #include "gui/pmods/pmods.h"

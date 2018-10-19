@@ -1,5 +1,5 @@
-#ifndef PLUGIN__PLUGIN_H
-#define PLUGIN__PLUGIN_H
+#ifndef FREEZE__PLUGIN__PLUGIN_H
+#define FREEZE__PLUGIN__PLUGIN_H
 
 #include "../recording/recording.h"
 #include "../samples/samples.h"

@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard SHARED__LOGGER__LOGGER_H
+// @guard FREEZE__SHARED__LOGGER__LOGGER_H
 
 #include "logger.h"
 #include "logger.priv.h"

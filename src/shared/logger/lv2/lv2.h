@@ -1,5 +1,5 @@
-#ifndef SHARED__LOGGER__LV2_H
-#define SHARED__LOGGER__LV2_H
+#ifndef FREEZE__SHARED__LOGGER__LV2_H
+#define FREEZE__SHARED__LOGGER__LV2_H
 
 #include "../logger/logger.h"
 #include <lv2/lv2plug.in/ns/ext/log/logger.h>

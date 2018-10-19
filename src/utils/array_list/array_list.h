@@ -1,5 +1,5 @@
-#ifndef UTILS__ARRAY_LIST_H
-#define UTILS__ARRAY_LIST_H
+#ifndef FREEZE__UTILS__ARRAY_LIST_H
+#define FREEZE__UTILS__ARRAY_LIST_H
 
 #include <stdbool.h>
 #include <stddef.h>

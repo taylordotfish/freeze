@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard SHARED__LOGGER__LV2_H
+// @guard FREEZE__SHARED__LOGGER__LV2_H
 
 #include "lv2.h"
 #include "lv2.priv.h"

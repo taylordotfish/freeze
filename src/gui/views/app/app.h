@@ -1,5 +1,5 @@
-#ifndef GUI__VIEWS__APP_H
-#define GUI__VIEWS__APP_H
+#ifndef FREEZE__GUI__VIEWS__APP_H
+#define FREEZE__GUI__VIEWS__APP_H
 
 #include "../db_path/db_path.h"
 #include "../record_buttons/record_buttons.h"

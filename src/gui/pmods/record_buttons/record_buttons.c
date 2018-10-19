@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard GUI__PMODS__RECORD_BUTTONS_H
+// @guard FREEZE__GUI__PMODS__RECORD_BUTTONS_H
 
 #include "record_buttons.h"
 #include <stddef.h>

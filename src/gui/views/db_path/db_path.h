@@ -1,5 +1,5 @@
-#ifndef GUI__VIEWS__DB_PATH_H
-#define GUI__VIEWS__DB_PATH_H
+#ifndef FREEZE__GUI__VIEWS__DB_PATH_H
+#define FREEZE__GUI__VIEWS__DB_PATH_H
 
 #include "gui/pmods/pmods.h"
 #include <gtk/gtk.h>

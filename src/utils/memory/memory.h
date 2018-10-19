@@ -1,5 +1,5 @@
-#ifndef UTILS__MEMORY_H
-#define UTILS__MEMORY_H
+#ifndef FREEZE__UTILS__MEMORY_H
+#define FREEZE__UTILS__MEMORY_H
 
 #include <stddef.h>
 #include <stdlib.h>

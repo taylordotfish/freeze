@@ -1,5 +1,5 @@
-#ifndef GUI__PMODS__APP_H
-#define GUI__PMODS__APP_H
+#ifndef FREEZE__GUI__PMODS__APP_H
+#define FREEZE__GUI__PMODS__APP_H
 
 #include "gui/models/models.h"
 #include "shared/client/client.h"

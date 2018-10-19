@@ -90,5 +90,8 @@ int main(void) {
 
     freeze_plugin_save_db(&plugin);
     freeze_plugin_destroy(&plugin);
+    freeze_client_destroy(&plugin_client);
+    freeze_client_destroy(&ui_client);
+    freeze_stub_free_urid_map(map);
     return 0;
 }

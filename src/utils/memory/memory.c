@@ -21,7 +21,7 @@
  * Memory allocation utilities.
  */
 
-// @guard UTILS__MEMORY_H
+// @guard FREEZE__UTILS__MEMORY_H
 
 #include "memory.h"
 #include <inttypes.h>

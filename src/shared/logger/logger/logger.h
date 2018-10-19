@@ -1,5 +1,5 @@
-#ifndef SHARED__LOGGER__LOGGER_H
-#define SHARED__LOGGER__LOGGER_H
+#ifndef FREEZE__SHARED__LOGGER__LOGGER_H
+#define FREEZE__SHARED__LOGGER__LOGGER_H
 
 #include <stdarg.h>
 #include <stdbool.h>

@@ -1,5 +1,5 @@
-#ifndef GUI__MODELS__APP_H
-#define GUI__MODELS__APP_H
+#ifndef FREEZE__GUI__MODELS__APP_H
+#define FREEZE__GUI__MODELS__APP_H
 
 #include "shared/mode/mode.h"
 #include <stdbool.h>

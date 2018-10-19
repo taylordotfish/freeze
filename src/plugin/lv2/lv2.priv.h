@@ -1,4 +1,6 @@
+#include <lv2/lv2plug.in/ns/ext/atom/atom.h>
 #include <lv2/lv2plug.in/ns/ext/state/state.h>
+#include <lv2/lv2plug.in/ns/lv2core/lv2.h>
 
 static void write_atom(void *context, const LV2_Atom *atom);
 
@@ -17,6 +19,8 @@ static bool check_atom(
     const char *name);
 
 static void update_position(FreezeLV2 *self, const LV2_Atom_Object *obj);
+
+static void handle_atom_event(FreezeLV2 *self, const LV2_Atom_Event *event);
 
 static void run(LV2_Handle instance, uint32_t sample_count);
 

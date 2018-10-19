@@ -17,8 +17,8 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SHARED__PORTS_H
-#define SHARED__PORTS_H
+#ifndef FREEZE__SHARED__PORTS_H
+#define FREEZE__SHARED__PORTS_H
 
 typedef enum FreezeLV2Ports {
     FREEZE_LV2_PORT_IN_L = 0,

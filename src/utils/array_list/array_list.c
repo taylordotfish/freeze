@@ -26,7 +26,7 @@
  * Private header file for @c array_list.c.
  */
 
-// @guard UTILS__ARRAY_LIST_H
+// @guard FREEZE__UTILS__ARRAY_LIST_H
 
 #include "array_list.h"
 #include "array_list.priv.h"

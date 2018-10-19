@@ -1,5 +1,5 @@
-#ifndef GUI__PMODS__RECORD_BUTTONS_H
-#define GUI__PMODS__RECORD_BUTTONS_H
+#ifndef FREEZE__GUI__PMODS__RECORD_BUTTONS_H
+#define FREEZE__GUI__PMODS__RECORD_BUTTONS_H
 
 #include "shared/mode/mode.h"
 #include <stdbool.h>

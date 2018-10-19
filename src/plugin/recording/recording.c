@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard PLUGIN__RECORDING_H
+// @guard FREEZE__PLUGIN__RECORDING_H
 
 #include "recording.h"
 #include "recording.priv.h"

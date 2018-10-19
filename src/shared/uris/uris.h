@@ -1,5 +1,5 @@
-#ifndef SHARED__URIS_H
-#define SHARED__URIS_H
+#ifndef FREEZE__SHARED__URIS_H
+#define FREEZE__SHARED__URIS_H
 
 #include <lv2/lv2plug.in/ns/ext/urid/urid.h>
 

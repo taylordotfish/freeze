@@ -21,7 +21,7 @@
  * Null-terminated string utilities.
  */
 
-// @guard UTILS__STRING_H
+// @guard FREEZE__UTILS__STRING_H
 
 #include "string.h"
 #include <inttypes.h>

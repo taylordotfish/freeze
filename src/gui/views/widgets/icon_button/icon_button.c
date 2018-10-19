@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard GUI__VIEWS__WIDGETS__ICON_BUTTON_H
+// @guard FREEZE__GUI__VIEWS__WIDGETS__ICON_BUTTON_H
 
 #include "icon_button.h"
 #include "icon_button.priv.h"

@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard PLUGIN__PLUGIN_H
+// @guard FREEZE__PLUGIN__PLUGIN_H
 
 #include "plugin.h"
 #include "plugin.priv.h"

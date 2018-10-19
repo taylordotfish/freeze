@@ -1,5 +1,5 @@
-#ifndef GUI__LV2_H
-#define GUI__LV2_H
+#ifndef FREEZE__GUI__LV2_H
+#define FREEZE__GUI__LV2_H
 
 #include "gui/models/models.h"
 #include "gui/pmods/pmods.h"

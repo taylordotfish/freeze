@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard GUI__PMODS__DB_PATH_H
+// @guard FREEZE__GUI__PMODS__DB_PATH_H
 
 #include "db_path.h"
 #include "utils/string/string.h"

@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard SHARED__CLIENT__CALLBACKS_H
+// @guard FREEZE__SHARED__CLIENT__CALLBACKS_H
 
 #include "callbacks.h"
 #include <stdlib.h>

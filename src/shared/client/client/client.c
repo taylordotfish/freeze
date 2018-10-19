@@ -17,7 +17,7 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard SHARED__CLIENT__CLIENT_H
+// @guard FREEZE__SHARED__CLIENT__CLIENT_H
 
 #include "client.h"
 #include "client.priv.h"

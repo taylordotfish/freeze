@@ -21,7 +21,7 @@
  * Utilities for managing callbacks.
  */
 
-// @guard UTILS__CALLBACK_H
+// @guard FREEZE__UTILS__CALLBACK_H
 
 #include "callback.h"
 #include <stdio.h>
