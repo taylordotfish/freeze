@@ -70,6 +70,14 @@ make
 [Git]: https://git-scm.com/
 
 
+Development notes
+-----------------
+
+Freeze uses [autoheaders](https://github.com/taylordotfish/autoheaders) to
+generate header files from the corresponding `.c` files. If you make changes
+to a `.c` file, use autoheaders to update the corresponding `.h` file.
+
+
 License
 -------
 
