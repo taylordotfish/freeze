@@ -1,7 +1,7 @@
 Freeze
 ======
 
-Version 0.1.5
+Version 0.1.6
 
 Freeze is an LV2 plugin for freezing tracks in a digital audio workstation—that
 is, temporarily rendering a track as audio to reduce CPU/DSP load, as tracks
@@ -62,7 +62,7 @@ Installation
 Run the following commands (you will need to have [Git] installed):
 
 ```
-git clone https://git.taylor.fish/taylor.fish/freeze ~/.lv2/freeze.lv2/
+git clone https://github.com/taylordotfish/freeze ~/.lv2/freeze.lv2/
 cd ~/.lv2/freeze.lv2/
 make
 ```
