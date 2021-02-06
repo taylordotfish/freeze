@@ -43,7 +43,7 @@ UI_OBJECTS = $(addsuffix .o,$(basename $(shell \
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -pedantic -std=c11 -fpic -MMD -MP -Isrc \
-         -fvisibility=hidden
+         -fvisibility=hidden -Wno-error=deprecated-declarations
 LDFLAGS = -shared -Wl,--no-undefined,--no-allow-shlib-undefined
 LDLIBS =
 
