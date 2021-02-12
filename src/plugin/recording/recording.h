@@ -30,7 +30,11 @@ void recording_init(Recording *self);
 void recording_clear(Recording *self);
 
 void recording_get(
-    const Recording *self, size_t pos, size_t len, StereoPort out);
+    const Recording *self,
+    size_t pos,
+    size_t len,
+    StereoPort out
+);
 
 void recording_set(Recording *self, size_t pos, StereoSlice samples);
 

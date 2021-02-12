@@ -17,7 +17,10 @@ static void recording_create_db_fp(Recording *self, FILE *file);
 static void recording_create_db(Recording *self, const char *path);
 
 static void recording_save_db_chunk(
-    Recording *self, FILE *file, size_t index);
+    Recording *self,
+    FILE *file,
+    size_t index
+);
 
 static void recording_save_db_fp(Recording *self, FILE *file);
 
@@ -30,10 +33,16 @@ static void recording_load_db_fp(Recording *self, FILE *file);
 static void recording_free_samples(Recording *self);
 
 static inline void write_int(
-    FILE *file, uint_fast64_t value, size_t num_bytes);
+    FILE *file,
+    uint_fast64_t value,
+    size_t num_bytes
+);
 
 static inline bool read_int(
-    FILE *file, uint_fast64_t *result, size_t num_bytes);
+    FILE *file,
+    uint_fast64_t *result,
+    size_t num_bytes
+);
 
 static inline void write_samples(FILE *file, const float *samples);
 

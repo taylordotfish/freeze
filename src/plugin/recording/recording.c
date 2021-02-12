@@ -145,7 +145,11 @@ void recording_clear(Recording *self) {
 }
 
 void recording_get(
-        const Recording *self, size_t pos, size_t len, StereoPort out) {
+    const Recording *self,
+    size_t pos,
+    size_t len,
+    StereoPort out
+) {
     const size_t max_length = (
         min_uint(pos + len, RECORDING_CHUNK_LENGTH * RECORDING_NUM_CHUNKS) -
         min_uint(pos, RECORDING_CHUNK_LENGTH * RECORDING_NUM_CHUNKS)
@@ -239,7 +243,10 @@ static void recording_create_db(Recording *self, const char *path) {
 }
 
 static void recording_save_db_chunk(
-        Recording *self, FILE *file, size_t index) {
+    Recording *self,
+    FILE *file,
+    size_t index
+) {
     RecordingChunk *chunk = &self->chunks[index];
     if (!chunk->modified) {
         return;
@@ -380,14 +387,20 @@ void recording_destroy(Recording *self) {
 /*************************/
 
 static inline void write_int(
-        FILE *file, uint_fast64_t value, size_t num_bytes) {
+    FILE *file,
+    uint_fast64_t value,
+    size_t num_bytes
+) {
     for (size_t i = num_bytes; i > 0; i--) {
         fputc((value >> (8 * (i - 1))) & 0xff, file);
     }
 }
 
 static inline bool read_int(
-        FILE *file, uint_fast64_t *result, size_t num_bytes) {
+    FILE *file,
+    uint_fast64_t *result,
+    size_t num_bytes
+) {
     uint_fast64_t value = 0;
     for (size_t i = 0; i < num_bytes; i++) {
         int chr = fgetc(file);
