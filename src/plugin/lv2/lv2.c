@@ -318,6 +318,7 @@ static LV2_State_Status save(
     plugin_log_trace(&self->logger, "Saving database...");
     freeze_plugin_save_db(&self->plugin);
     plugin_log_trace(&self->logger, "Done saving database.");
+    freeze_plugin_on_state_save(&self->plugin);
     return LV2_STATE_SUCCESS;
 }
 
