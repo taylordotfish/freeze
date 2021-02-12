@@ -1,8 +1,8 @@
 #ifndef FREEZE__GUI__PRESENTATION__RECORD_BUTTONS_H
 #define FREEZE__GUI__PRESENTATION__RECORD_BUTTONS_H
 
-#include "shared/client/client.h"
-#include "shared/mode/mode.h"
+#include <shared/client/client.h>
+#include <shared/mode/mode.h>
 #include <stdbool.h>
 
 typedef struct RecordButtonsPres {

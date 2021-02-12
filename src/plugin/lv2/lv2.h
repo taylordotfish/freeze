@@ -2,7 +2,7 @@
 #define FREEZE__PLUGIN__LV2_H
 
 #include "../plugin/plugin.h"
-#include "shared/logger/logger.h"
+#include <shared/logger/logger.h>
 
 typedef struct FreezeLV2 {
     FreezePlugin plugin;

@@ -26,7 +26,7 @@
 #ifdef HEADER
     #include "../models/models.h"
     #include "../views/views.h"
-    #include "shared/client/client.h"
+    #include <shared/client/client.h>
 
     typedef struct FreezeGUI {
         AppModel model;

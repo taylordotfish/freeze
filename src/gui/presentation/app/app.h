@@ -3,7 +3,7 @@
 
 #include "../record_buttons/record_buttons.h"
 #include "../../models/app/app.h"
-#include "shared/client/client.h"
+#include <shared/client/client.h>
 #include <stdbool.h>
 
 typedef struct AppPres {

@@ -20,10 +20,10 @@
 // @guard FREEZE__GUI__LV2_H
 
 #include "lv2.h"
-#include "shared/lv2_util/lv2_util.h"
-#include "shared/ports/ports.h"
-#include "utils/memory/memory.h"
-#include "utils/unused/unused.h" /* @include */
+#include <shared/lv2_util/lv2_util.h>
+#include <shared/ports/ports.h>
+#include <utils/memory/memory.h>
+#include <utils/unused/unused.h> /* @include */
 #include "lv2.priv.h"
 
 #include <assert.h>

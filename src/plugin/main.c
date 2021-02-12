@@ -21,11 +21,11 @@
 // plugin initialization.
 
 #include "plugin/plugin.h"
-#include "shared/client/client.h"
-#include "shared/logger/logger.h"
-#include "shared/stubs/stubs.h"
-#include "shared/uris/uris.h"
-#include "utils/unused/unused.h"
+#include <shared/client/client.h>
+#include <shared/logger/logger.h>
+#include <shared/stubs/stubs.h>
+#include <shared/uris/uris.h>
+#include <utils/unused/unused.h>
 
 #include <lv2/lv2plug.in/ns/ext/urid/urid.h>
 #include <assert.h>

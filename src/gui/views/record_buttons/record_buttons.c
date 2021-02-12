@@ -21,7 +21,7 @@
 
 #include "record_buttons.h"
 #include "../style/style.h"
-#include "utils/unused/unused.h" /* @include */
+#include <utils/unused/unused.h> /* @include */
 #include "record_buttons.priv.h"
 
 #ifdef HEADER

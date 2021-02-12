@@ -20,9 +20,9 @@
 // @guard FREEZE__PLUGIN__LV2_H
 
 #include "lv2.h"
-#include "shared/lv2_util/lv2_util.h"
-#include "shared/ports/ports.h"
-#include "utils/unused/unused.h" /* @include */
+#include <shared/lv2_util/lv2_util.h>
+#include <shared/ports/ports.h>
+#include <utils/unused/unused.h> /* @include */
 #include "lv2.priv.h"
 
 #include <inttypes.h>
@@ -30,7 +30,7 @@
 
 #ifdef HEADER
     #include "../plugin/plugin.h"
-    #include "shared/logger/logger.h"
+    #include <shared/logger/logger.h>
 
     typedef struct FreezeLV2 {
         FreezePlugin plugin;

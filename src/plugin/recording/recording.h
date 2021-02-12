@@ -2,7 +2,7 @@
 #define FREEZE__PLUGIN__RECORDING_H
 
 #include "../samples/samples.h"
-#include "shared/logger/logger.h"
+#include <shared/logger/logger.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>

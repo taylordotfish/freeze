@@ -3,9 +3,9 @@
 
 #include "../recording/recording.h"
 #include "../samples/samples.h"
-#include "shared/client/client.h"
-#include "shared/logger/logger.h"
-#include "shared/mode/mode.h"
+#include <shared/client/client.h>
+#include <shared/logger/logger.h>
+#include <shared/mode/mode.h>
 #include <stdbool.h>
 
 typedef struct FreezePlugin {

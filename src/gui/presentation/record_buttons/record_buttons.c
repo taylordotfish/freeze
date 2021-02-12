@@ -23,8 +23,8 @@
 #include <stddef.h>
 
 #ifdef HEADER
-    #include "shared/client/client.h"
-    #include "shared/mode/mode.h"
+    #include <shared/client/client.h>
+    #include <shared/mode/mode.h>
     #include <stdbool.h>
 
     typedef struct RecordButtonsPres {

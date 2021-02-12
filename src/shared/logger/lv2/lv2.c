@@ -21,7 +21,7 @@
 
 #include "lv2.h"
 #include "lv2.priv.h"
-#include "utils/string/string.h"
+#include <utils/string/string.h>
 
 #ifdef HEADER
     #include "../logger/logger.h"

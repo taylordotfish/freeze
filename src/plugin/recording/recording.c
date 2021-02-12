@@ -21,8 +21,8 @@
 
 #include "recording.h"
 #include "recording.priv.h"
-#include "utils/int/int.h"
-#include "utils/memory/memory.h"
+#include <utils/int/int.h>
+#include <utils/memory/memory.h>
 
 #include <assert.h>
 #include <inttypes.h>
@@ -31,7 +31,7 @@
 
 #ifdef HEADER
     #include "../samples/samples.h"
-    #include "shared/logger/logger.h"
+    #include <shared/logger/logger.h>
     #include <stdbool.h>
     #include <stdint.h>
     #include <stdio.h>

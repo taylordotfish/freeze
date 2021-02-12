@@ -30,7 +30,7 @@
 
 #include "array_list.h"
 #include "array_list.priv.h"
-#include "utils/memory/memory.h"
+#include <utils/memory/memory.h>
 
 #include <assert.h>
 #include <stdlib.h>

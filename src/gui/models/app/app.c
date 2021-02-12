@@ -21,10 +21,10 @@
 
 #include "app.h"
 #include "app.priv.h"
-#include "utils/string/string.h"
+#include <utils/string/string.h>
 
 #ifdef HEADER
-    #include "shared/mode/mode.h"
+    #include <shared/mode/mode.h>
     #include <stdbool.h>
     #include <stddef.h>
 

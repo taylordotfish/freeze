@@ -2,8 +2,8 @@
 #define FREEZE__SHARED__CLIENT__CLIENT_H
 
 #include "../callbacks/callbacks.h"
-#include "shared/logger/logger.h"
-#include "shared/uris/uris.h"
+#include <shared/logger/logger.h>
+#include <shared/uris/uris.h>
 
 #include <lv2/lv2plug.in/ns/ext/atom/forge.h>
 #include <lv2/lv2plug.in/ns/extensions/ui/ui.h>

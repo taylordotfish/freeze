@@ -1,8 +1,8 @@
 #ifndef FREEZE__SHARED__CLIENT__CALLBACKS_H
 #define FREEZE__SHARED__CLIENT__CALLBACKS_H
 
-#include "utils/callback/callback.h"
-#include "shared/mode/mode.h"
+#include <utils/callback/callback.h>
+#include <shared/mode/mode.h>
 
 // Sent by plugin to indicate state; sent by UI to request state change.
 typedef void (*FREEZE_CLIENT_ON_MODE)(void *, FreezeRecordingMode mode);

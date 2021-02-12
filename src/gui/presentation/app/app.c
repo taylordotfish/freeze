@@ -20,14 +20,14 @@
 // @guard FREEZE__GUI__PRESENTATION__APP_H
 
 #include "app.h"
-#include "utils/utils.h"
+#include <utils/utils.h>
 #include <assert.h>
 #include <stdio.h>
 
 #ifdef HEADER
     #include "../record_buttons/record_buttons.h"
     #include "../../models/app/app.h"
-    #include "shared/client/client.h"
+    #include <shared/client/client.h>
     #include <stdbool.h>
 
     typedef struct AppPres {

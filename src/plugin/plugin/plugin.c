@@ -20,17 +20,17 @@
 // @guard FREEZE__PLUGIN__PLUGIN_H
 
 #include "plugin.h"
-#include "utils/string/string.h"
-#include "utils/unused/unused.h" /* @include */
+#include <utils/string/string.h>
+#include <utils/unused/unused.h> /* @include */
 #include "plugin.priv.h"
 #include <math.h>
 
 #ifdef HEADER
     #include "../recording/recording.h"
     #include "../samples/samples.h"
-    #include "shared/client/client.h"
-    #include "shared/logger/logger.h"
-    #include "shared/mode/mode.h"
+    #include <shared/client/client.h>
+    #include <shared/logger/logger.h>
+    #include <shared/mode/mode.h>
     #include <stdbool.h>
 
     typedef struct FreezePlugin {
