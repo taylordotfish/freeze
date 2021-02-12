@@ -57,12 +57,15 @@ RecordButtonsEvents record_buttons_pres_events(const RecordButtonsPres *self) {
 
 void record_buttons_events_on_record_click(const RecordButtonsEvents *self) {
     freeze_client_set_mode(self->client, FREEZE_MODE_RECORDING);
+    freeze_client_write(self->client);
 }
 
 void record_buttons_events_on_stop_click(const RecordButtonsEvents *self) {
     freeze_client_set_mode(self->client, FREEZE_MODE_PLAYING);
+    freeze_client_write(self->client);
 }
 
 void record_buttons_events_on_clear_click(const RecordButtonsEvents *self) {
     freeze_client_clear_db(self->client);
+    freeze_client_write(self->client);
 }

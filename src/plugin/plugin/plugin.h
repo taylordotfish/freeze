@@ -6,18 +6,22 @@
 #include "shared/client/client.h"
 #include "shared/logger/logger.h"
 #include "shared/mode/mode.h"
+#include <stdbool.h>
 
 typedef struct FreezePlugin {
-    bool active;
     Recording recording;
-    char *db_path;
-
     uint_least32_t frame;
     FreezeRecordingMode mode;
-    bool playing;
 
     FreezeClient *client;
     const PluginLogger *logger;
+    size_t samples_since_ui_msg;
+
+    char *db_path;
+    bool db_path_changed: 1;
+    bool ui_initialized: 1;
+    bool active: 1;
+    bool playing: 1;
 } FreezePlugin;
 
 void freeze_plugin_init(FreezePlugin *self, FreezeClient *client);
@@ -31,9 +35,6 @@ void freeze_plugin_set_db_path(FreezePlugin *self, const char *path);
 void freeze_plugin_load_db(FreezePlugin *self);
 
 void freeze_plugin_save_db(FreezePlugin *self);
-
-// Should be called when the plugin's state is saved.
-void freeze_plugin_on_state_save(FreezePlugin *self);
 
 void freeze_plugin_activate(FreezePlugin *self);
 

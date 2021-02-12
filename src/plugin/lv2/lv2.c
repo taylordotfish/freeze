@@ -217,19 +217,13 @@ static void update_position(FreezeLV2 *self, const LV2_Atom_Object *obj) {
 
 static void handle_atom_event(FreezeLV2 *self, const LV2_Atom_Event *event) {
     uint_least32_t event_type = event->body.type;
-    if (!lv2_atom_forge_is_object_type(&self->notify_forge, event_type)) {
-        plugin_log_warn(
-            &self->logger, "Control port received non-object atom."
-        );
-        return;
+    if (lv2_atom_forge_is_object_type(&self->notify_forge, event_type)) {
+        const LV2_Atom_Object *obj = (const LV2_Atom_Object *)&event->body;
+        if (obj->body.otype == self->uris.time_Position) {
+            update_position(self, obj);
+            return;
+        }
     }
-
-    const LV2_Atom_Object *obj = (const LV2_Atom_Object *)&event->body;
-    if (obj->body.otype == self->uris.time_Position) {
-        update_position(self, obj);
-        return;
-    }
-
     freeze_client_on_event(&self->client, &event->body);
 }
 
@@ -266,6 +260,8 @@ static void run(LV2_Handle instance, uint32_t sample_count) {
 
     input.length = sample_count - current_frame;
     freeze_plugin_run(&self->plugin, input, output);
+    freeze_client_write(&self->client);
+    lv2_atom_forge_pop(&self->notify_forge, &self->notify_frame);
 }
 
 static void cleanup(LV2_Handle instance) {
@@ -318,7 +314,6 @@ static LV2_State_Status save(
     plugin_log_trace(&self->logger, "Saving database...");
     freeze_plugin_save_db(&self->plugin);
     plugin_log_trace(&self->logger, "Done saving database.");
-    freeze_plugin_on_state_save(&self->plugin);
     return LV2_STATE_SUCCESS;
 }
 

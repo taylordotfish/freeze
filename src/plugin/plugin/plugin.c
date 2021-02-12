@@ -31,34 +31,48 @@
     #include "shared/client/client.h"
     #include "shared/logger/logger.h"
     #include "shared/mode/mode.h"
+    #include <stdbool.h>
 
     typedef struct FreezePlugin {
-        bool active;
         Recording recording;
-        char *db_path;
-
         uint_least32_t frame;
         FreezeRecordingMode mode;
-        bool playing;
 
         FreezeClient *client;
         const PluginLogger *logger;
+        size_t samples_since_ui_msg;
+
+        char *db_path;
+        bool db_path_changed: 1;
+        bool ui_initialized: 1;
+        bool active: 1;
+        bool playing: 1;
     } FreezePlugin;
 #endif
 
 #define SPEED_EPSILON 1e-6
 
+// How many samples must pass before `freeze_plugin_run` sends UI updates.
+#define SAMPLES_PER_UI_UPDATE 24000
+
 void freeze_plugin_init(FreezePlugin *self, FreezeClient *client) {
     recording_init(&self->recording);
     self->db_path = NULL;
+    freeze_plugin_reset_changed_flags(self);
 
     self->client = client;
     self->logger = &plugin_logger_fallback;
+    self->samples_since_ui_msg = SAMPLES_PER_UI_UPDATE;
+    self->ui_initialized = false;
 
     FREEZE_CLIENT_ADD_CALLBACK(client, ON_GET, on_client_get, self);
     FREEZE_CLIENT_ADD_CALLBACK(client, ON_MODE, on_client_mode, self);
     FREEZE_CLIENT_ADD_CALLBACK(client, ON_CLEAR_DB, on_client_clear_db, self);
     freeze_plugin_reset_state(self);
+}
+
+static void freeze_plugin_reset_changed_flags(FreezePlugin *self) {
+    self->db_path_changed = false;
 }
 
 const char *freeze_plugin_get_db_path(const FreezePlugin *self) {
@@ -72,6 +86,7 @@ const char *freeze_plugin_get_db_path_or_empty(const FreezePlugin *self) {
 void freeze_plugin_set_db_path(FreezePlugin *self, const char *path) {
     free(self->db_path);
     self->db_path = strdup_or_abort(path);
+    self->db_path_changed = true;
 }
 
 void freeze_plugin_load_db(FreezePlugin *self) {
@@ -88,13 +103,6 @@ void freeze_plugin_save_db(FreezePlugin *self) {
         return;
     }
     recording_save_db(&self->recording, self->db_path);
-}
-
-// Should be called when the plugin's state is saved.
-void freeze_plugin_on_state_save(FreezePlugin *self) {
-    freeze_client_set_db_path(
-        self->client, freeze_plugin_get_db_path_or_empty(self)
-    );
 }
 
 static void freeze_plugin_reset_state(FreezePlugin *self) {
@@ -127,11 +135,22 @@ void freeze_plugin_run(
     StereoSlice input,
     StereoPort output
 ) {
-    if (!self->playing) {
+    if (self->playing) {
+        freeze_plugin_run_playing(self, input, output);
+    } else {
         memset(output.left, 0, input.length * sizeof(float));
         memset(output.right, 0, input.length * sizeof(float));
-        return;
     }
+
+    self->samples_since_ui_msg += input.length;
+    maybe_update_ui(self);
+}
+
+static void freeze_plugin_run_playing(
+    FreezePlugin *self,
+    StereoSlice input,
+    StereoPort output
+) {
     switch (self->mode) {
         case FREEZE_MODE_PLAYING:
             recording_get(&self->recording, self->frame, input.length, output);
@@ -146,6 +165,30 @@ void freeze_plugin_run(
             break;
     }
     self->frame += input.length;
+}
+
+static void maybe_update_ui(FreezePlugin *self) {
+    if (!self->ui_initialized) {
+        return;
+    }
+    if (self->samples_since_ui_msg < SAMPLES_PER_UI_UPDATE) {
+        return;
+    }
+    bool any_update = false;
+    if (any_update |= self->db_path_changed) {
+        freeze_client_set_db_path(
+            self->client, freeze_plugin_get_db_path_or_empty(self)
+        );
+    }
+    if (any_update |= self->mode == FREEZE_MODE_RECORDING) {
+        freeze_client_set_mem_used(
+            self->client, recording_get_memory_used(&self->recording)
+        );
+    }
+    if (any_update) {
+        self->samples_since_ui_msg = 0;
+        freeze_plugin_reset_changed_flags(self);
+    }
 }
 
 static void forward_samples(StereoSlice input, StereoPort output) {
@@ -178,6 +221,9 @@ static void on_client_get(void *context, UNUSED void *unused) {
     freeze_client_set_mem_used(
         self->client, recording_get_memory_used(&self->recording)
     );
+    self->samples_since_ui_msg = 0;
+    self->ui_initialized = true;
+    freeze_plugin_reset_changed_flags(self);
 }
 
 static void on_client_mode(void *context, FreezeRecordingMode mode) {
@@ -190,6 +236,7 @@ static void on_client_mode(void *context, FreezeRecordingMode mode) {
     freeze_client_set_mem_used(
         self->client, recording_get_memory_used(&self->recording)
     );
+    self->samples_since_ui_msg = 0;
 }
 
 static void on_client_clear_db(void *context, UNUSED void *unused) {
@@ -199,4 +246,5 @@ static void on_client_clear_db(void *context, UNUSED void *unused) {
     freeze_client_set_mem_used(
         self->client, recording_get_memory_used(&self->recording)
     );
+    self->samples_since_ui_msg = 0;
 }

@@ -33,6 +33,7 @@ typedef struct FreezeURIs {
     LV2_URID patch_property;
     LV2_URID patch_value;
     LV2_URID atom_eventTransfer;
+    LV2_URID atom_Tuple;
     LV2_URID atom_Path;
     LV2_URID atom_Long;
     LV2_URID atom_Float;

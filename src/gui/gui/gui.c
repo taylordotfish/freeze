@@ -46,6 +46,7 @@ void freeze_gui_init(FreezeGUI *self, FreezeClient *client) {
 
     // Request plugin state.
     freeze_client_request_state(client);
+    freeze_client_write(client);
 }
 
 GtkWidget *freeze_gui_widget(const FreezeGUI *self) {

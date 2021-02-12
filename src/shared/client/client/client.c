@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 taylor.fish <contact@taylor.fish>
+ * Copyright (C) 2018, 2021 taylor.fish <contact@taylor.fish>
  *
  * This file is part of Freeze.
  *
@@ -46,22 +46,31 @@
         void *write_context;
 
         LV2_Atom_Forge forge;
-        uint8_t forge_buffer[2048];
+        LV2_Atom_Forge_Frame frame;
+        uint8_t forge_buffer[3840];
         const PluginLogger *logger;
     } FreezeClient;
 #endif
 
 #define CHECK_FORGE(ref) do { \
     if (ref == 0) { \
-        fprintf(stderr, "At line %d in %s:\n", __LINE__, __FILE__); \
-        fprintf(stderr, "Exceeded buffer space when forging LV2 atom.\n"); \
-        abort(); \
+        plugin_log_error( \
+            self->logger, "At line %d in %s:\n", __LINE__, __FILE__ \
+        ); \
+        plugin_log_error( \
+            self->logger, "Exceeded buffer space when forging LV2 atom.\n" \
+        ); \
+        freeze_client_reset_forge(self); \
+        return false; \
     } \
 } while (0)
 
 void freeze_client_init(
-        FreezeClient *self, const FreezeURIs *uris, AtomWriteFunc write,
-        void *write_context) {
+    FreezeClient *self,
+    const FreezeURIs *uris,
+    AtomWriteFunc write,
+    void *write_context
+) {
     self->uris = uris;
     self->write = write;
     self->write_context = write_context;
@@ -69,17 +78,24 @@ void freeze_client_init(
 
     freeze_client_callbacks_init(&self->callbacks);
     lv2_atom_forge_init(&self->forge, uris->map);
+    freeze_client_reset_forge(self);
 }
 
 static void freeze_client_reset_forge(FreezeClient *self) {
     lv2_atom_forge_set_buffer(
         &self->forge, self->forge_buffer, sizeof(self->forge_buffer)
     );
+    lv2_atom_forge_tuple(&self->forge, &self->frame);
 }
 
-static void freeze_client_write(
-        FreezeClient *self, const LV2_Atom_Forge_Ref ref) {
-    self->write(self->write_context, (const LV2_Atom *)ref);
+#include <time.h>
+
+void freeze_client_write(FreezeClient *self) {
+    const LV2_Atom *atom = (const LV2_Atom *)self->frame.ref;
+    if (atom->size > 0) {
+        self->write(self->write_context, (const LV2_Atom *)self->frame.ref);
+        freeze_client_reset_forge(self);
+    }
 }
 
 
@@ -88,33 +104,29 @@ static void freeze_client_write(
 /* Sending functions */
 /*********************/
 
-void freeze_client_request_state(FreezeClient *self) {
-    freeze_client_reset_forge(self);
+bool freeze_client_request_state(FreezeClient *self) {
     LV2_Atom_Forge *forge = &self->forge;
     const FreezeURIs *uris = self->uris;
 
     LV2_Atom_Forge_Frame frame;
-    LV2_Atom_Forge_Ref atom = lv2_atom_forge_object(
-        forge, &frame, 0, uris->patch_Get
-    );
-    CHECK_FORGE(atom);
+    CHECK_FORGE(lv2_atom_forge_object(forge, &frame, 0, uris->patch_Get));
     lv2_atom_forge_pop(forge, &frame);
-    freeze_client_write(self, atom);
+    return true;
 }
 
-static LV2_Atom_Forge_Ref freeze_client_forge_patch_set(
-        FreezeClient *self, LV2_Atom_Forge_Frame *frame) {
-    freeze_client_reset_forge(self);
-    LV2_Atom_Forge_Ref atom = lv2_atom_forge_object(
-        &self->forge, frame, 0, self->uris->patch_Set
+static bool freeze_client_forge_patch_set(
+    FreezeClient *self,
+    LV2_Atom_Forge_Frame *frame
+) {
+    CHECK_FORGE(
+        lv2_atom_forge_object(&self->forge, frame, 0, self->uris->patch_Set)
     );
-    CHECK_FORGE(atom);
-    return atom;
+    return true;
 }
 
-void freeze_client_set_mode(FreezeClient *self, FreezeRecordingMode mode) {
+bool freeze_client_set_mode(FreezeClient *self, FreezeRecordingMode mode) {
     LV2_Atom_Forge_Frame frame;
-    LV2_Atom_Forge_Ref atom = freeze_client_forge_patch_set(self, &frame);
+    freeze_client_forge_patch_set(self, &frame);
     LV2_Atom_Forge *forge = &self->forge;
     const FreezeURIs *uris = self->uris;
 
@@ -123,12 +135,12 @@ void freeze_client_set_mode(FreezeClient *self, FreezeRecordingMode mode) {
     CHECK_FORGE(lv2_atom_forge_key(forge, uris->patch_value));
     CHECK_FORGE(lv2_atom_forge_int(forge, mode));
     lv2_atom_forge_pop(forge, &frame);
-    freeze_client_write(self, atom);
+    return true;
 }
 
-void freeze_client_set_db_path(FreezeClient *self, const char *db_path) {
+bool freeze_client_set_db_path(FreezeClient *self, const char *db_path) {
     LV2_Atom_Forge_Frame frame;
-    LV2_Atom_Forge_Ref atom = freeze_client_forge_patch_set(self, &frame);
+    freeze_client_forge_patch_set(self, &frame);
     LV2_Atom_Forge *forge = &self->forge;
     const FreezeURIs *uris = self->uris;
 
@@ -145,12 +157,12 @@ void freeze_client_set_db_path(FreezeClient *self, const char *db_path) {
 
     CHECK_FORGE(lv2_atom_forge_string(forge, db_path, path_len));
     lv2_atom_forge_pop(forge, &frame);
-    freeze_client_write(self, atom);
+    return true;
 }
 
-void freeze_client_set_mem_used(FreezeClient *self, size_t mem_used) {
+bool freeze_client_set_mem_used(FreezeClient *self, size_t mem_used) {
     LV2_Atom_Forge_Frame frame;
-    LV2_Atom_Forge_Ref atom = freeze_client_forge_patch_set(self, &frame);
+    freeze_client_forge_patch_set(self, &frame);
     LV2_Atom_Forge *forge = &self->forge;
     const FreezeURIs *uris = self->uris;
 
@@ -159,13 +171,12 @@ void freeze_client_set_mem_used(FreezeClient *self, size_t mem_used) {
     CHECK_FORGE(lv2_atom_forge_key(forge, uris->patch_value));
     CHECK_FORGE(lv2_atom_forge_long(forge, mem_used));
     lv2_atom_forge_pop(forge, &frame);
-    freeze_client_write(self, atom);
+    return true;
 }
 
-void freeze_client_clear_db(FreezeClient *self) {
+bool freeze_client_clear_db(FreezeClient *self) {
     LV2_Atom_Forge *forge = &self->forge;
     const FreezeURIs *uris = self->uris;
-    freeze_client_reset_forge(self);
     LV2_Atom_Forge_Frame frame;
     LV2_Atom_Forge_Ref atom = lv2_atom_forge_object(
         &self->forge, &frame, 0, self->uris->cmd_Command
@@ -175,7 +186,7 @@ void freeze_client_clear_db(FreezeClient *self) {
     CHECK_FORGE(lv2_atom_forge_key(forge, uris->cmd_type));
     CHECK_FORGE(lv2_atom_forge_urid(forge, uris->freeze_cmd_clear_db));
     lv2_atom_forge_pop(forge, &frame);
-    freeze_client_write(self, atom);
+    return true;
 }
 
 
@@ -185,6 +196,23 @@ void freeze_client_clear_db(FreezeClient *self) {
 /***********************/
 
 void freeze_client_on_event(FreezeClient *self, const LV2_Atom *atom) {
+    const FreezeURIs *uris = self->uris;
+    // Ensure atom is tuple.
+    if (atom->type != uris->atom_Tuple) {
+        plugin_log_warn(self->logger, "Received unexpected non-tuple atom.");
+        return;
+    }
+
+    const LV2_Atom_Tuple *tuple = (LV2_Atom_Tuple *)atom;
+    LV2_ATOM_TUPLE_FOREACH(tuple, item) {
+        freeze_client_on_single_event(self, item);
+    }
+}
+
+static void freeze_client_on_single_event(
+    FreezeClient *self,
+    const LV2_Atom *atom
+) {
     const FreezeURIs *uris = self->uris;
     // Ensure atom is object.
     if (!lv2_atom_forge_is_object_type(&self->forge, atom->type)) {
@@ -214,7 +242,9 @@ void freeze_client_on_event(FreezeClient *self, const LV2_Atom *atom) {
 }
 
 static void freeze_client_on_patch_set(
-        FreezeClient *self, const LV2_Atom_Object *obj) {
+    FreezeClient *self,
+    const LV2_Atom_Object *obj
+) {
     const FreezeURIs *uris = self->uris;
 
     // Get patch:property.
@@ -258,7 +288,9 @@ static void freeze_client_on_patch_set(
 }
 
 static void freeze_client_on_command(
-        FreezeClient *self, const LV2_Atom_Object *obj) {
+    FreezeClient *self,
+    const LV2_Atom_Object *obj
+) {
     const FreezeURIs *uris = self->uris;
 
     // Get cmd:type.
@@ -287,7 +319,9 @@ static void freeze_client_on_command(
 /*******************/
 
 void freeze_client_set_logger(
-        FreezeClient *self, const PluginLogger *logger) {
+    FreezeClient *self,
+    const PluginLogger *logger
+) {
     self->logger = logger;
 }
 
