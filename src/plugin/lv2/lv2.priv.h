@@ -5,8 +5,11 @@
 static void write_atom(void *context, const LV2_Atom *atom);
 
 static LV2_Handle instantiate(
-    const LV2_Descriptor *descriptor, double sample_rate,
-    const char *bundle_path, const LV2_Feature * const *features);
+    UNUSED const LV2_Descriptor *descriptor,
+    UNUSED double sample_rate,
+    UNUSED const char *bundle_path,
+    const LV2_Feature * const *features
+);
 
 static void activate(LV2_Handle instance);
 
@@ -27,14 +30,20 @@ static void run(LV2_Handle instance, uint32_t sample_count);
 static void cleanup(LV2_Handle instance);
 
 static LV2_State_Status save(
-    LV2_Handle instance, LV2_State_Store_Function store,
-    LV2_State_Handle handle, uint32_t flags,
-    const LV2_Feature * const *features);
+    LV2_Handle instance,
+    LV2_State_Store_Function store,
+    LV2_State_Handle handle,
+    UNUSED uint32_t flags,
+    const LV2_Feature * const *features
+);
 
 static LV2_State_Status restore(
-    LV2_Handle instance, LV2_State_Retrieve_Function retrieve,
-    LV2_State_Handle handle, uint32_t flags,
-    const LV2_Feature * const *features);
+    LV2_Handle instance,
+    LV2_State_Retrieve_Function retrieve,
+    LV2_State_Handle handle,
+    UNUSED uint32_t flags,
+    const LV2_Feature * const *features
+);
 
 static const void *extension_data(const char *uri);
 

@@ -20,9 +20,10 @@
 // @guard FREEZE__PLUGIN__LV2_H
 
 #include "lv2.h"
-#include "lv2.priv.h"
 #include "shared/lv2_util/lv2_util.h"
 #include "shared/ports/ports.h"
+#include "utils/unused/unused.h" /* @include */
+#include "lv2.priv.h"
 
 #include <inttypes.h>
 #include <string.h>
@@ -58,8 +59,6 @@
 
 #define FREEZE_DB_NAME "FreezeDB"
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
 static void write_atom(void *context, const LV2_Atom *atom) {
     FreezeLV2 *self = context;
     if (self->notify_port == NULL) {
@@ -74,8 +73,11 @@ static void write_atom(void *context, const LV2_Atom *atom) {
 }
 
 static LV2_Handle instantiate(
-        const LV2_Descriptor *descriptor, double sample_rate,
-        const char *bundle_path, const LV2_Feature * const *features) {
+    UNUSED const LV2_Descriptor *descriptor,
+    UNUSED double sample_rate,
+    UNUSED const char *bundle_path,
+    const LV2_Feature * const *features
+) {
     FreezeLV2 *self = malloc(sizeof(FreezeLV2));
     if (self == NULL) {
         return NULL;
@@ -274,9 +276,12 @@ static void cleanup(LV2_Handle instance) {
 }
 
 static LV2_State_Status save(
-        LV2_Handle instance, LV2_State_Store_Function store,
-        LV2_State_Handle handle, uint32_t flags,
-        const LV2_Feature * const *features) {
+    LV2_Handle instance,
+    LV2_State_Store_Function store,
+    LV2_State_Handle handle,
+    UNUSED uint32_t flags,
+    const LV2_Feature * const *features
+) {
     FreezeLV2 *self = (FreezeLV2 *)instance;
     LV2_State_Map_Path *map_path = NULL;
     LV2_State_Make_Path *make_path = NULL;
@@ -317,9 +322,12 @@ static LV2_State_Status save(
 }
 
 static LV2_State_Status restore(
-        LV2_Handle instance, LV2_State_Retrieve_Function retrieve,
-        LV2_State_Handle handle, uint32_t flags,
-        const LV2_Feature * const *features) {
+    LV2_Handle instance,
+    LV2_State_Retrieve_Function retrieve,
+    LV2_State_Handle handle,
+    UNUSED uint32_t flags,
+    const LV2_Feature * const *features
+) {
     FreezeLV2 *self = (FreezeLV2 *)instance;
     LV2_State_Map_Path *map_path = NULL;
     const char *missing = lv2_features_query(
