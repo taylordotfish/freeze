@@ -1,4 +1,4 @@
-# Copyright (C) 2018 taylor.fish <contact@taylor.fish>
+# Copyright (C) 2018, 2021 taylor.fish <contact@taylor.fish>
 #
 # This file is part of Freeze.
 #
@@ -43,7 +43,7 @@ UI_OBJECTS = $(addsuffix .o,$(basename $(shell \
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -pedantic -std=c11 -fpic -MMD -MP -Isrc \
-         -fvisibility=hidden -Wno-error=deprecated-declarations
+         -fvisibility=hidden
 LDFLAGS = -shared -Wl,--no-undefined,--no-allow-shlib-undefined
 LDLIBS =
 
@@ -77,7 +77,8 @@ ALL_BINARIES = $(PLUGIN_BINARY) $(UI_BINARY)
 ALL_OBJECTS = $(SHARED_OBJECTS) $(PLUGIN_OBJECTS) $(UI_OBJECTS)
 
 $(UI_BINARY): LDLIBS += $(shell pkg-config --libs gtk+-2.0)
-$(UI_OBJECTS): CFLAGS += $(shell pkg-config --cflags gtk+-2.0)
+$(UI_OBJECTS): CFLAGS += $(shell pkg-config --cflags gtk+-2.0) \
+                         -Wno-error=deprecated-declarations
 
 ALL_PLUGIN_OBJECTS = $(SHARED_OBJECTS) $(PLUGIN_OBJECTS)
 ALL_UI_OBJECTS = $(SHARED_OBJECTS) $(UI_OBJECTS)
