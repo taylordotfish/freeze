@@ -1,0 +1,3 @@
+This directory contains code shared between the GUI (../gui) and the audio
+plugin (../plugin). Of particular importance is the code in client/, which
+facilitates communication between the GUI and audio plugin.
