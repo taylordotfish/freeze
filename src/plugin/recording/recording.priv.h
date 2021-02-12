@@ -8,13 +8,13 @@ static inline bool recording_chunk_is_allocated(const RecordingChunk *self);
 
 static void recording_chunk_alloc(RecordingChunk *self);
 
-static void recording_chunk_prepare_for_write(RecordingChunk *self);
-
-static inline float flush_to_zero(float val);
+// Prepares the chunk for writing and returns whether or not the chunk is the
+// most recently allocated chunk.
+static bool recording_prepare_chunk(Recording *self, RecordingChunk *chunk);
 
 static void recording_create_db_fp(Recording *self, FILE *file);
 
-static void recording_create_db(Recording *self, const char *path);
+static bool recording_create_db(Recording *self, const char *path);
 
 static void recording_save_db_chunk(
     Recording *self,
@@ -24,11 +24,17 @@ static void recording_save_db_chunk(
 
 static void recording_save_db_fp(Recording *self, FILE *file);
 
-static bool recording_load_db_chunk(Recording *self, FILE *file);
+typedef enum ReadStatus {
+    READ_OK,
+    READ_END,
+    READ_ERROR,
+} ReadStatus;
 
-static bool recording_check_db_header(Recording *self, FILE *file);
+static ReadStatus recording_load_db_chunk(Recording *self, FILE *file);
 
-static void recording_load_db_fp(Recording *self, FILE *file);
+static ReadStatus recording_check_db_header(Recording *self, FILE *file);
+
+static bool recording_load_db_fp(Recording *self, FILE *file);
 
 static void recording_free_samples(Recording *self);
 

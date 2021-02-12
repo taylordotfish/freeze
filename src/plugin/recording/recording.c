@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 taylor.fish <contact@taylor.fish>
+ * Copyright (C) 2018, 2021 taylor.fish <contact@taylor.fish>
  *
  * This file is part of Freeze.
  *
@@ -50,8 +50,11 @@
     typedef struct Recording {
         RecordingChunk chunks[RECORDING_NUM_CHUNKS];
         size_t saved_chunks;
-        bool cleared;
+        size_t allocated_chunks;
+
         const PluginLogger *logger;
+        size_t last_allocated;
+        bool cleared;
     } Recording;
 #endif
 
@@ -61,7 +64,7 @@
     #error Could not verify that all-zero-bit floats are 0.0 on this system.
 #endif
 
-// Samples below this value are flushed to zero.
+// Chunks filled entirely with samples below this value are not saved.
 #define RECORDING_SAMPLE_EPSILON 1e-6
 
 #define RECORDING_NULL_FILE_POS ((1 << 16) - 1)
@@ -119,11 +122,6 @@ static void recording_chunk_alloc(RecordingChunk *self) {
     }
 }
 
-static void recording_chunk_prepare_for_write(RecordingChunk *self) {
-    self->modified = true;
-    recording_chunk_alloc(self);
-}
-
 
 
 /*************/
@@ -132,15 +130,16 @@ static void recording_chunk_prepare_for_write(RecordingChunk *self) {
 
 void recording_init(Recording *self) {
     recording_clear(self);
-    self->cleared = false;
     self->logger = &plugin_logger_fallback;
 }
 
 void recording_clear(Recording *self) {
     self->cleared = true;
     self->saved_chunks = 0;
+    self->allocated_chunks = 0;
+    self->last_allocated = -1;
     for (size_t i = 0; i < RECORDING_NUM_CHUNKS; i++) {
-        recording_chunk_init(&self->chunks[i]);
+        recording_chunk_clear(&self->chunks[i]);
     }
 }
 
@@ -179,11 +178,34 @@ void recording_get(
     }
 }
 
-static inline float flush_to_zero(float val) {
-    return (
-        (val < 0 && val > -RECORDING_SAMPLE_EPSILON) ||
-        (val >= 0 && val < RECORDING_SAMPLE_EPSILON)
-    ) ? 0 : val;
+// Prepares the chunk for writing and returns whether or not the chunk is the
+// most recently allocated chunk.
+static bool recording_prepare_chunk(Recording *self, RecordingChunk *chunk) {
+    size_t index = chunk - self->chunks;
+    if (self->last_allocated == index) {
+        return true;
+    }
+
+    if (recording_chunk_is_allocated(chunk)) {
+        return false;
+    }
+
+    RecordingChunk *last_allocated = (
+        self->last_allocated < RECORDING_NUM_CHUNKS ?
+        &self->chunks[self->last_allocated] :
+        NULL
+    );
+
+    if (last_allocated && !last_allocated->modified) {
+        RecordingChunk tmp = *chunk;
+        *chunk = *last_allocated;
+        *last_allocated = tmp;
+    } else {
+        recording_chunk_alloc(chunk);
+        self->allocated_chunks++;
+    }
+    self->last_allocated = index;
+    return true;
 }
 
 void recording_set(Recording *self, size_t pos, StereoSlice samples) {
@@ -194,34 +216,28 @@ void recording_set(Recording *self, size_t pos, StereoSlice samples) {
 
     if (pos + length >= RECORDING_CHUNK_LENGTH * RECORDING_NUM_CHUNKS) {
         plugin_log_error(self->logger, "Exceeded recording buffer size.");
-        abort();
+        return;
     }
 
     RecordingChunk *chunk = &self->chunks[pos / RECORDING_CHUNK_LENGTH];
     size_t offset = pos % RECORDING_CHUNK_LENGTH;
-    bool chunk_prepared = false;
+    bool is_last_allocated = recording_prepare_chunk(self, chunk);
 
     for (size_t written = 0; written < length; written++, offset++) {
         if (offset >= RECORDING_CHUNK_LENGTH) {
             offset = 0;
             chunk++;
-            chunk_prepared = false;
+            is_last_allocated = recording_prepare_chunk(self, chunk);
         }
 
-        float left_sample = flush_to_zero(samples.left[written]);
-        float right_sample = flush_to_zero(samples.right[written]);
-        bool chunk_allocated = recording_chunk_is_allocated(chunk);
-        if (!chunk_allocated && left_sample == 0 && right_sample == 0) {
-            continue;
-        }
+        chunk->samples_left[offset] = samples.left[written];
+        chunk->samples_right[offset] = samples.right[written];
 
-        if (!chunk_prepared) {
-            chunk_prepared = true;
-            recording_chunk_prepare_for_write(chunk);
-        }
-
-        chunk->samples_left[offset] = left_sample;
-        chunk->samples_right[offset] = right_sample;
+        chunk->modified |= (
+            !is_last_allocated |
+            (samples.left[written] >= RECORDING_SAMPLE_EPSILON) |
+            (samples.right[written] >= RECORDING_SAMPLE_EPSILON)
+        );
     }
 }
 
@@ -231,15 +247,16 @@ static void recording_create_db_fp(Recording *self, FILE *file) {
     recording_save_db_fp(self, file);
 }
 
-static void recording_create_db(Recording *self, const char *path) {
+static bool recording_create_db(Recording *self, const char *path) {
     plugin_log_trace(self->logger, "Creating new database: %s", path);
     FILE *file = fopen(path, "wb");
     if (file == NULL) {
         plugin_log_error(self->logger, "Could not create database: %s", path);
-        abort();
+        return false;
     }
     recording_create_db_fp(self, file);
     fclose(file);
+    return true;
 }
 
 static void recording_save_db_chunk(
@@ -288,17 +305,27 @@ void recording_save_db(Recording *self, const char *path) {
     fclose(file);
 }
 
-static bool recording_load_db_chunk(Recording *self, FILE *file) {
+#ifdef PRIVATE_HEADER
+    typedef enum ReadStatus {
+        READ_OK,
+        READ_END,
+        READ_ERROR,
+    } ReadStatus;
+#endif
+
+static ReadStatus recording_load_db_chunk(Recording *self, FILE *file) {
     uint_fast64_t chunk_index = 0;
     if (!read_int(file, &chunk_index, RECORDING_DB_CHUNK_INDEX_SIZE)) {
-        return false;
+        return READ_END;
     }
 
     if (chunk_index >= RECORDING_NUM_CHUNKS) {
         plugin_log_error(
-            self->logger, "Invalid chunk index: %zu", chunk_index
+            self->logger, "Invalid chunk index in database: %zu", chunk_index
         );
-        abort();
+        // Write new database when saved.
+        self->cleared = true;
+        return READ_ERROR;
     }
 
     RecordingChunk *chunk = &self->chunks[chunk_index];
@@ -306,44 +333,61 @@ static bool recording_load_db_chunk(Recording *self, FILE *file) {
     read_samples(file, chunk->samples_left);
     read_samples(file, chunk->samples_right);
     chunk->file_pos = self->saved_chunks++;
-    return true;
+    return READ_OK;
 }
 
-static bool recording_check_db_header(Recording *self, FILE *file) {
+static ReadStatus recording_check_db_header(Recording *self, FILE *file) {
     assert(self != NULL);
     uint_fast64_t magic_num = 0;
     if (!read_int(file, &magic_num, RECORDING_DB_MAGIC_NUM_SIZE)) {
-        return false;
+        return READ_END;
     }
     if (magic_num != RECORDING_DB_MAGIC_NUM) {
         plugin_log_error(
             self->logger, "Invalid DB magic number: %"PRIxFAST64, magic_num
         );
-        abort();
+        return READ_ERROR;
     }
 
     uint_fast64_t version = 0;
     if (!read_int(file, &version, RECORDING_DB_VERSION_SIZE)) {
         plugin_log_error(self->logger, "Could not read version from DB.");
-        abort();
+        return READ_ERROR;
     }
     if (version != RECORDING_DB_VERSION) {
         plugin_log_error(
             self->logger, "Invalid DB version: %"PRIuFAST64, version
         );
-        abort();
+        return READ_ERROR;
     }
-    return true;
+    return READ_OK;
 }
 
-static void recording_load_db_fp(Recording *self, FILE *file) {
-    recording_free_samples(self);
-    if (!recording_check_db_header(self, file)) {
-        plugin_log_warn(self->logger, "Loaded empty database.");
-        return;
+static bool recording_load_db_fp(Recording *self, FILE *file) {
+    if (self->allocated_chunks > 0) {
+        recording_clear(self);
     }
-    while (recording_load_db_chunk(self, file)) {
+
+    switch (recording_check_db_header(self, file)) {
+        case READ_OK: {
+            break;
+        }
+        case READ_END: {
+            plugin_log_warn(self->logger, "Loaded empty database.");
+            return true;
+        }
+        default: {
+            return false;
+        }
     }
+
+    ReadStatus status = READ_OK;
+    while ((status = recording_load_db_chunk(self, file)) == READ_OK) {
+    }
+
+    self->allocated_chunks = self->saved_chunks;
+    self->cleared = false;
+    return status == READ_END;
 }
 
 bool recording_load_db(Recording *self, const char *path) {
@@ -353,9 +397,9 @@ bool recording_load_db(Recording *self, const char *path) {
         plugin_log_warn(self->logger, "Could not open database: %s", path);
         return false;
     }
-    recording_load_db_fp(self, file);
+    bool status = recording_load_db_fp(self, file);
     fclose(file);
-    return true;
+    return status;
 }
 
 size_t recording_get_memory_used(const Recording *self) {
@@ -381,6 +425,8 @@ static void recording_free_samples(Recording *self) {
 void recording_destroy(Recording *self) {
     recording_free_samples(self);
 }
+
+
 
 /*************************/
 /* Serialization helpers */

@@ -21,8 +21,11 @@ typedef struct RecordingChunk {
 typedef struct Recording {
     RecordingChunk chunks[RECORDING_NUM_CHUNKS];
     size_t saved_chunks;
-    bool cleared;
+    size_t allocated_chunks;
+
     const PluginLogger *logger;
+    size_t last_allocated;
+    bool cleared;
 } Recording;
 
 void recording_init(Recording *self);
