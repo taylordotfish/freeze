@@ -20,8 +20,9 @@
 // @guard FREEZE__PLUGIN__PLUGIN_H
 
 #include "plugin.h"
-#include "plugin.priv.h"
 #include "utils/string/string.h"
+#include "utils/unused/unused.h" /* @include */
+#include "plugin.priv.h"
 #include <math.h>
 
 #ifdef HEADER
@@ -122,7 +123,10 @@ void freeze_plugin_set_speed(FreezePlugin *self, float speed) {
 }
 
 void freeze_plugin_run(
-        FreezePlugin *self, StereoSlice input, StereoPort output) {
+    FreezePlugin *self,
+    StereoSlice input,
+    StereoPort output
+) {
     if (!self->playing) {
         memset(output.left, 0, input.length * sizeof(float));
         memset(output.right, 0, input.length * sizeof(float));
@@ -165,9 +169,7 @@ void freeze_plugin_destroy(FreezePlugin *self) {
 /* FreezeClient callbacks */
 /**************************/
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
-static void on_client_get(void *context, void *unused) {
+static void on_client_get(void *context, UNUSED void *unused) {
     FreezePlugin *self = context;
     freeze_client_set_mode(self->client, self->mode);
     freeze_client_set_db_path(
@@ -190,7 +192,7 @@ static void on_client_mode(void *context, FreezeRecordingMode mode) {
     );
 }
 
-static void on_client_clear_db(void *context, void *unused) {
+static void on_client_clear_db(void *context, UNUSED void *unused) {
     FreezePlugin *self = context;
     plugin_log_trace(self->logger, "Received request to clear DB.");
     recording_clear(&self->recording);

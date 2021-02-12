@@ -44,7 +44,10 @@ void freeze_plugin_set_frame(FreezePlugin *self, uint_least32_t frame);
 void freeze_plugin_set_speed(FreezePlugin *self, float speed);
 
 void freeze_plugin_run(
-    FreezePlugin *self, StereoSlice input, StereoPort output);
+    FreezePlugin *self,
+    StereoSlice input,
+    StereoPort output
+);
 
 void freeze_plugin_set_logger(FreezePlugin *self, const PluginLogger *logger);
 
