@@ -1,16 +1,14 @@
 #ifndef FREEZE__GUI__LV2_H
 #define FREEZE__GUI__LV2_H
 
-#include "gui/models/models.h"
-#include "gui/pmods/pmods.h"
-#include "gui/views/views.h"
+#include "../gui/gui.h"
+#include "../models/models.h"
+#include "../presentation/presentation.h"
+#include "../views/views.h"
 #include <lv2/lv2plug.in/ns/extensions/ui/ui.h>
 
 typedef struct FreezeLV2UI {
-    AppModel model;
-    AppPM pmod;
-    AppView view;
-
+    FreezeGUI gui;
     FreezeURIs uris;
     FreezeClient client;
     PluginLogger logger;

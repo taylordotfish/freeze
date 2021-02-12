@@ -9,9 +9,15 @@ typedef struct AppModel {
     char *path;
     FreezeRecordingMode recording_mode;
     size_t memory_used;
+
+    bool path_changed: 1;
+    bool recording_mode_changed: 1;
+    bool memory_used_changed: 1;
 } AppModel;
 
 void app_model_init(AppModel *self);
+
+void app_model_reset_changed_flags(AppModel *self);
 
 const char *app_model_get_path(const AppModel *self);
 

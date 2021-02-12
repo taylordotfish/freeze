@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 taylor.fish <contact@taylor.fish>
+ * Copyright (C) 2018, 2021 taylor.fish <contact@taylor.fish>
  *
  * This file is part of Freeze.
  *
@@ -17,56 +17,44 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @guard FREEZE__GUI__VIEWS__DB_PATH_H
+// @guard FREEZE__GUI__VIEWS__WIDGETS__DB_PATH_H
 
-#include "db_path.h"
-#include "db_path.priv.h"
-#include "../style/style.h"
+#include "path_display.h"
+#include "../../style/style.h"
+#include <stdbool.h>
+#include <stddef.h>
 
 #ifdef HEADER
-    #include "gui/pmods/pmods.h"
     #include <gtk/gtk.h>
 
-    typedef struct DBPathView {
-        DBPathPM *pmod;
-
+    typedef struct PathDisplay {
         GtkWidget *box;
         GtkWidget *label;
         GtkWidget *entry;
-    } DBPathView;
+    } PathDisplay;
 #endif
 
-void db_path_view_init(DBPathView *self, DBPathPM *pmod) {
+void path_display_init(PathDisplay *self, const char* label) {
     // Containing box
     self->box = gtk_hbox_new(false, FREEZE_GTK_SPACING);
 
     // Label
-    self->label = gtk_label_new("Database Path:");
-    gtk_box_pack_start(GTK_BOX(self->box), self->label, false, false, 0);
+    self->label = NULL;
+    if (label) {
+        self->label = gtk_label_new(label);
+        gtk_box_pack_start(GTK_BOX(self->box), self->label, false, false, 0);
+    }
 
     // Entry
     self->entry = gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(self->box), self->entry, true, true, 0);
     gtk_editable_set_editable(GTK_EDITABLE(self->entry), false);
-
-    // Presentation model
-    self->pmod = pmod;
-    db_path_pm_set_sync(pmod, self, db_path_view_sync);
-    db_path_pm_sync(pmod);
 }
 
-GtkWidget *db_path_view_widget(const DBPathView *self) {
+void path_display_set(PathDisplay *self, const char* path) {
+    gtk_entry_set_text(GTK_ENTRY(self->entry), path);
+}
+
+GtkWidget *path_display_widget(const PathDisplay *self) {
     return self->box;
-}
-
-static void db_path_view_sync(void *context) {
-    DBPathView *self = context;
-    gtk_entry_set_text(
-        GTK_ENTRY(self->entry), db_path_pm_get_path(self->pmod)
-    );
-}
-
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
-void db_path_view_destroy(DBPathView *self) {
 }

@@ -1,6 +1,4 @@
-static void on_rb_mode_change(void *context, FreezeRecordingMode mode);
-
-static void on_rb_clear(void *context);
+static void freeze_gui_update(FreezeGUI *self);
 
 static void on_client_mode(void *context, FreezeRecordingMode mode);
 

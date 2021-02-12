@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 taylor.fish <contact@taylor.fish>
+ * Copyright (C) 2018, 2021 taylor.fish <contact@taylor.fish>
  *
  * This file is part of Freeze.
  *
@@ -20,25 +20,24 @@
 // @guard FREEZE__GUI__LV2_H
 
 #include "lv2.h"
-#include "lv2.priv.h"
-#include "utils/memory/memory.h"
 #include "shared/lv2_util/lv2_util.h"
 #include "shared/ports/ports.h"
+#include "utils/memory/memory.h"
+#include "utils/unused/unused.h" /* @include */
+#include "lv2.priv.h"
 
 #include <assert.h>
 #include <string.h>
 
 #ifdef HEADER
-    #include "gui/models/models.h"
-    #include "gui/pmods/pmods.h"
-    #include "gui/views/views.h"
+    #include "../gui/gui.h"
+    #include "../models/models.h"
+    #include "../presentation/presentation.h"
+    #include "../views/views.h"
     #include <lv2/lv2plug.in/ns/extensions/ui/ui.h>
 
     typedef struct FreezeLV2UI {
-        AppModel model;
-        AppPM pmod;
-        AppView view;
-
+        FreezeGUI gui;
         FreezeURIs uris;
         FreezeClient client;
         PluginLogger logger;
@@ -49,8 +48,6 @@
     } FreezeLV2UI;
 #endif
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
 static void write_atom(void *context, const LV2_Atom *atom) {
     FreezeLV2UI *self = context;
     self->write(
@@ -60,10 +57,14 @@ static void write_atom(void *context, const LV2_Atom *atom) {
 }
 
 static LV2UI_Handle instantiate(
-        const LV2UI_Descriptor *descriptor, const char *plugin_uri,
-        const char *bundle_path, LV2UI_Write_Function write_function,
-        LV2UI_Controller controller, LV2UI_Widget *widget,
-        const LV2_Feature * const *features) {
+    UNUSED const LV2UI_Descriptor *descriptor,
+    UNUSED const char *plugin_uri,
+    UNUSED const char *bundle_path,
+    LV2UI_Write_Function write_function,
+    LV2UI_Controller controller,
+    LV2UI_Widget *widget,
+    const LV2_Feature * const *features
+) {
     FreezeLV2UI *self = malloc_or_abort(sizeof(FreezeLV2UI));
     plugin_logger_fallback.name = "FreezeUI/fallback";
     self->logger = plugin_logger_fallback;
@@ -99,19 +100,21 @@ static LV2UI_Handle instantiate(
     freeze_uris_init(&self->uris, map);
     freeze_client_init(&self->client, &self->uris, write_atom, self);
     freeze_client_set_logger(&self->client, &self->logger);
+    freeze_gui_init(&self->gui, &self->client);
 
-    app_model_init(&self->model);
-    app_pm_init(&self->pmod, &self->model, &self->client);
-    app_view_init(&self->view, &self->pmod);
-    GtkWidget *app_widget = app_view_widget(&self->view);
+    GtkWidget *app_widget = freeze_gui_widget(&self->gui);
     *widget = (LV2UI_Widget)app_widget;
     plugin_log_trace(&self->logger, "UI instantiated.");
     return (LV2UI_Handle)self;
 }
 
 static void port_event(
-        LV2UI_Handle handle, uint32_t port_index, uint32_t buffer_size,
-        uint32_t format, const void *buffer) {
+    LV2UI_Handle handle,
+    UNUSED uint32_t port_index,
+    UNUSED uint32_t buffer_size,
+    uint32_t format,
+    const void *buffer
+) {
     FreezeLV2UI *self = (FreezeLV2UI *)handle;
     if (format != self->uris.atom_eventTransfer) {
         plugin_log_warn(&self->logger, "Unknown port event format.");
@@ -123,9 +126,7 @@ static void port_event(
 
 static void cleanup(LV2UI_Handle handle) {
     FreezeLV2UI *self = (FreezeLV2UI *)handle;
-    app_view_destroy(&self->view);
-    app_pm_destroy(&self->pmod);
-    app_model_destroy(&self->model);
+    freeze_gui_destroy(&self->gui);
     freeze_client_destroy(&self->client);
     free(self);
 }

@@ -11,7 +11,7 @@ typedef struct IconButton {
     GtkWidget *label;
 } IconButton;
 
-IconButton *icon_button_new(void);
+void icon_button_init(IconButton *self);
 
 void icon_button_set_text(IconButton *self, const char *text);
 

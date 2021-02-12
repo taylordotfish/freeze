@@ -36,21 +36,16 @@
     } IconButton;
 #endif
 
-IconButton *icon_button_new(void) {
-    IconButton *self = malloc_or_abort(sizeof(IconButton));
+void icon_button_init(IconButton *self) {
     self->box = gtk_hbox_new(false, 4);
     self->align = gtk_alignment_new(0.5, 0.5, 0, 0);
     gtk_container_add(GTK_CONTAINER(self->align), self->box);
 
     self->button = gtk_button_new();
     gtk_container_add(GTK_CONTAINER(self->button), self->align);
-    g_signal_connect(
-        self->button, "destroy", G_CALLBACK(icon_button_on_destroy), self
-    );
 
     self->image = NULL;
     self->label = NULL;
-    return self;
 }
 
 static void icon_button_remove_text(IconButton *self) {
@@ -99,12 +94,4 @@ void icon_button_set_icon(IconButton *self, const char *icon_name) {
 
 GtkWidget *icon_button_widget(const IconButton *self) {
     return self->button;
-}
-
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
-// GTK signal handler
-static void icon_button_on_destroy(GtkWidget *button, void *context) {
-    IconButton *self = context;
-    free(self);
 }

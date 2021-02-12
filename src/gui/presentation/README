@@ -1,0 +1,18 @@
+This directory contains presentation models, abstract representations of the
+views (in ../views). Presentation models are responsible for providing the
+views with data from the models (in ../models) in a format that minimizes the
+logic that the view has to perform. For more information, see
+<https://martinfowler.com/eaaDev/PresentationModel.html>.
+
+For views that have interactive components, the corresponding presentation
+model provides an `Events` structure (e.g., `RecordButtonsEvents` in
+./record_buttons/record_buttons.c) that is retained by the view (since the
+presentation models themselves are not retained but are instead provided to
+each view's `update` method). When an event occurs in the view, the
+corresponding event handler method in the `Events` structure is called. Again,
+this minimizes the logic that has to occur in the view.
+
+Presentation models may provide the views with information on which pieces of
+view data have changed. This is optional and not required for correctness, but
+it allows views to skip certain parts of the update process to optimize
+performance.

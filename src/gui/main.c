@@ -17,13 +17,15 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "views/views.h"
-#include "pmods/pmods.h"
-#include "models/models.h"
+// This is a test file used for debugging -- see lv2/lv2.c for the actual
+// plugin initialization.
+
+#include "gui/gui.h"
 #include "shared/client/client.h"
 #include "shared/logger/logger.h"
 #include "shared/stubs/stubs.h"
 #include "shared/uris/uris.h"
+#include "utils/unused/unused.h"
 
 #include <lv2/lv2plug.in/ns/ext/urid/urid.h>
 #include <lv2/lv2plug.in/ns/ext/atom/forge.h>
@@ -37,13 +39,11 @@ static LV2_Atom_Forge forge;
 static FreezeURIs uris;
 static uint8_t forge_buffer[1024];
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
-static void on_destroy(GtkWidget *window, void *context) {
+static void on_destroy(UNUSED GtkWidget *window, UNUSED void *context) {
     gtk_main_quit();
 }
 
-static void atom_write_func(void *context, const LV2_Atom *atom) {
+static void atom_write_func(void *context, UNUSED const LV2_Atom *atom) {
     FreezeClient *client = context;
     printf("UI sent atom.\n");
     int mode = rand() % 2;
@@ -65,9 +65,6 @@ int main(int argc, char **argv) {
         plugin_logger_fallback.debug = true;
     #endif
 
-    AppModel model;
-    app_model_init(&model);
-
     LV2_URID_Map *map = freeze_stub_make_urid_map();
     freeze_uris_init(&uris, map);
     lv2_atom_forge_init(&forge, uris.map);
@@ -75,26 +72,21 @@ int main(int argc, char **argv) {
     FreezeClient client;
     freeze_client_init(&client, &uris, atom_write_func, &client);
 
-    AppPM pm;
-    app_pm_init(&pm, &model, &client);
-
     gtk_init(&argc, &argv);
-    AppView view;
-    app_view_init(&view, &pm);
+    FreezeGUI gui;
+    freeze_gui_init(&gui, &client);
 
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_modal(GTK_WINDOW(window), true);
     gtk_window_set_title(GTK_WINDOW(window), "Freeze");
 
-    gtk_container_add(GTK_CONTAINER(window), app_view_widget(&view));
+    gtk_container_add(GTK_CONTAINER(window), freeze_gui_widget(&gui));
     gtk_widget_show_all(window);
     gtk_window_present(GTK_WINDOW(window));
     g_signal_connect(window, "destroy", G_CALLBACK(on_destroy), NULL);
 
     gtk_main();
-    app_view_destroy(&view);
-    app_pm_destroy(&pm);
-    app_model_destroy(&model);
+    freeze_gui_destroy(&gui);
     freeze_client_destroy(&client);
     return 0;
 }
