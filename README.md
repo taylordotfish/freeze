@@ -11,6 +11,13 @@ but Ardour, for example, cannot freeze MIDI tracks.
 
 [0]: https://en.wikipedia.org/wiki/Buffer_underrun
 
+Usage
+-----
+
+![Screenshot of Freeze in Ardour](misc/screenshot.png)
+
+*Freeze running in [Ardour](https://ardour.org)*
+
 To use Freeze, insert an instance of the plugin somewhere in a track’s chain of
 effects. Plugins occurring before the Freeze instance can be turned off to
 reduce CPU/DSP time once the audio is frozen, but they also won’t be
