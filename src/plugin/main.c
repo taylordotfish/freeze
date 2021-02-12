@@ -17,19 +17,21 @@
  * along with Freeze.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// This is a test file used for debugging -- see lv2/lv2.c for the actual
+// plugin initialization.
+
 #include "plugin/plugin.h"
 #include "shared/client/client.h"
 #include "shared/logger/logger.h"
 #include "shared/stubs/stubs.h"
 #include "shared/uris/uris.h"
+#include "utils/unused/unused.h"
 
 #include <lv2/lv2plug.in/ns/ext/urid/urid.h>
 #include <assert.h>
 #include <stdio.h>
 
 #define DB_PATH "FreezeDB-TEST"
-
-#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 float output_left[1024];
 float output_right[1024];
@@ -56,7 +58,10 @@ static void on_ui_atom_write(void *context, const LV2_Atom *atom) {
     freeze_client_on_event(plugin_client, atom);
 }
 
-static void on_plugin_atom_write(void *context, const LV2_Atom *atom) {
+static void on_plugin_atom_write(
+    UNUSED void *context,
+    UNUSED const LV2_Atom *atom
+) {
     printf("Plugin sent atom.\n");
 }
 
