@@ -12,9 +12,9 @@ but Ardour, for example, cannot freeze MIDI tracks.
 [0]: https://en.wikipedia.org/wiki/Buffer_underrun
 
 To use Freeze, insert an instance of the plugin somewhere in a track’s chain of
-effects. Plugins occurring before the Freeze instance will no longer consume
-CPU/DSP time while Freeze is active, but they also won’t be configurable
-without having to re-freeze the track.
+effects. Plugins occurring before the Freeze instance can be turned off to
+reduce CPU/DSP time once the audio is frozen, but they also won’t be
+configurable without having to re-freeze the track.
 
 After inserting the Freeze instance, open the GUI and click the Record button.
 Then, in your project, play all sections where the track emits audio. This
@@ -28,9 +28,8 @@ how much memory is being used to store the recorded audio. This amount of
 memory is present both in RAM and on disk.
 
 Then, disable or deactivate all plugins that occur before Freeze in the track’s
-effect chain. This ensures that the plugins no longer consume CPU/DSP time.
-
-The track will then be frozen and should behave as if the entire effect chain
+effect chain. This ensures that the plugins no longer consume CPU/DSP time. The
+track will then be frozen and should behave as if the entire effect chain
 were active, while being much less resource intensive.
 
 If you change something in the track and need to re-freeze, enable all of the
