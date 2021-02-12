@@ -48,7 +48,11 @@ bool app_pres_memory_text_changed(const AppPres *self) {
 }
 
 const char *app_pres_get_db_path(const AppPres *self) {
-    return app_model_get_path(self->model);
+    const char *path = app_model_get_path(self->model);
+    if (path) {
+        return path;
+    }
+    return "";
 }
 
 bool app_pres_db_path_changed(const AppPres *self) {

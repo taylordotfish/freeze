@@ -10,8 +10,10 @@ typedef struct AppModel {
     FreezeRecordingMode recording_mode;
     size_t memory_used;
 
+    // Changes are tracked for performance optimizations -- when updating
+    // the GUI, we can skip certain parts of the update if we know the
+    // data hasn't changed.
     bool path_changed: 1;
-    bool recording_mode_changed: 1;
     bool memory_used_changed: 1;
 } AppModel;
 

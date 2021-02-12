@@ -20,6 +20,7 @@
 // @guard FREEZE__GUI__MODELS__APP_H
 
 #include "app.h"
+#include "app.priv.h"
 #include "utils/string/string.h"
 
 #ifdef HEADER
@@ -44,12 +45,16 @@ void app_model_init(AppModel *self) {
     self->path = NULL;
     self->recording_mode = FREEZE_MODE_PLAYING;
     self->memory_used = 0;
-    app_model_reset_changed_flags(self);
+    app_model_set_changed_flags(self, true);
 }
 
 void app_model_reset_changed_flags(AppModel *self) {
-    self->path_changed = false;
-    self->memory_used_changed = false;
+    app_model_set_changed_flags(self, false);
+}
+
+static void app_model_set_changed_flags(AppModel *self, bool value) {
+    self->path_changed = value;
+    self->memory_used_changed = value;
 }
 
 const char *app_model_get_path(const AppModel *self) {
@@ -75,8 +80,8 @@ size_t app_model_get_memory_used(const AppModel *self) {
 }
 
 void app_model_set_memory_used(AppModel *self, size_t memory_used) {
+    self->memory_used_changed = memory_used != self->memory_used;
     self->memory_used = memory_used;
-    self->memory_used_changed = true;
 }
 
 void app_model_destroy(AppModel *self) {
