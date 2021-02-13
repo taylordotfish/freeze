@@ -1,7 +1,7 @@
 Freeze
 ======
 
-Version 0.1.6
+Version 0.1.7
 
 Freeze is an LV2 plugin for freezing tracks in a digital audio workstation—that
 is, temporarily rendering a track as audio to reduce CPU/DSP load, as tracks
@@ -10,6 +10,7 @@ quite common. Some DAWs like Ardour support track freezing to a certain extent,
 but Ardour, for example, cannot freeze MIDI tracks.
 
 [0]: https://en.wikipedia.org/wiki/Buffer_underrun
+
 
 Usage
 -----
@@ -30,9 +31,9 @@ is not necessary to play sections where the track is silent, even if other
 tracks aren’t.
 
 After all sections have been played back, click the Stop button in the GUI.
-The “Memory Used” text at the bottom of the GUI should update, showing you
-how much memory is being used to store the recorded audio. This amount of
-memory is present both in RAM and on disk.
+The “Memory Used” text at the bottom of the GUI will show you how much memory
+is being used to store the recorded audio. This amount of memory is present
+both in RAM and on disk.
 
 Then, disable or deactivate all plugins that occur before Freeze in the track’s
 effect chain. This ensures that the plugins no longer consume CPU/DSP time. The
@@ -46,11 +47,27 @@ convenient to open Freeze’s GUI and click the Clear button, which clears all
 recorded audio.
 
 
+What’s new
+----------
+
+Version 0.1.7:
+
+* The displayed memory usage in the GUI now updates continuously while
+  recording.
+* Samples with a small amplitude are no longer flushed to zero (but long
+  sections of audio that consist entirely of small (< 1e−6) samples are
+  still treated as silence).
+
+Version 0.1.5:
+
+* Fixed compilation errors due to deprecation warnings within GTK 2.
+
+
 Dependencies
 ------------
 
 * LV2 development files
-* GTK+ 2 development files
+* GTK 2 development files
 * GCC
 * GNU Make
 
@@ -79,9 +96,12 @@ make
 Development notes
 -----------------
 
-Freeze uses [autoheaders](https://github.com/taylordotfish/autoheaders) to
-generate header files from the corresponding `.c` files. If you make changes
-to a `.c` file, use autoheaders to update the corresponding `.h` file.
+Freeze uses [autoheaders] to generate header files from the corresponding `.c`
+files. If you make changes to a `.c` file, use autoheaders (or the wrapper
+script [scripts/makeheader.sh]) to update the corresponding `.h` file.
+
+[autoheaders]: https://github.com/taylordotfish/autoheaders
+[scripts/makeheader.sh]: scripts/makeheader.sh
 
 
 License
