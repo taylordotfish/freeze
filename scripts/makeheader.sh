@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # makeheader.sh: Generates headers with autoheaders.
-# See <https://git.taylor.fish/taylor.fish/autoheaders>.
+# See <https://github.com/taylordotfish/autoheaders>.
 #
 # Copyright (C) 2018 taylor.fish <contact@taylor.fish>
 #
@@ -22,7 +22,7 @@ set -e
 
 NOT_FOUND_MSG='
 Could not find autoheaders (is it installed?).
-See <https://git.taylor.fish/taylor.fish/autoheaders>.
+See <https://github.com/taylordotfish/autoheaders>.
 '
 
 USAGE_MSG='
@@ -34,7 +34,7 @@ before running this script, it will be replaced with a private header.
 
 VERSION_MSG='
 autoheaders must be at least version 0.3.0. Please update autoheaders.
-See <http://git.taylor.fish/taylor.fish/autoheaders>.
+See <http://github.com/taylordotfish/autoheaders>.
 '
 
 if ! which autoheaders > /dev/null; then
