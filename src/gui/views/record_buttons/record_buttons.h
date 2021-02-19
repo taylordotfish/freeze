@@ -8,7 +8,7 @@
 
 typedef struct RecordButtonsView {
     RecordButtonsEvents events;
-    bool events_init: 1;
+    bool events_init;
 
     GtkWidget *box;
     IconButton record_button;

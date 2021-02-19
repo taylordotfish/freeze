@@ -80,7 +80,7 @@ size_t app_model_get_memory_used(const AppModel *self) {
 }
 
 void app_model_set_memory_used(AppModel *self, size_t memory_used) {
-    self->memory_used_changed = memory_used != self->memory_used;
+    self->memory_used_changed = (memory_used != self->memory_used);
     self->memory_used = memory_used;
 }
 
