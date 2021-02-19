@@ -51,9 +51,11 @@ RecordButtonsEvents record_buttons_pres_events(const RecordButtonsPres *self) {
     };
 }
 
-/*******************************/
-/* RecordButtonsEvents methods */
-/*******************************/
+
+
+/***********************/
+/* RecordButtonsEvents */
+/***********************/
 
 void record_buttons_events_on_record_click(const RecordButtonsEvents *self) {
     freeze_client_set_mode(self->client, FREEZE_MODE_RECORDING);

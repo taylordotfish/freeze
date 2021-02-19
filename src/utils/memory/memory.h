@@ -65,7 +65,11 @@ void *malloc_array_or_abort(size_t nmemb, size_t size);
  * @return A pointer to the newly allocated memory.
  */
 void *realloc_increase(
-    void *data, size_t *nmemb, size_t size, size_t nmemb_inc);
+    void *data,
+    size_t *nmemb,
+    size_t size,
+    size_t nmemb_inc
+);
 
 /**
  * Calculates the increased size of a heap-allocated array (but does not

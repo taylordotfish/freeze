@@ -110,7 +110,11 @@ void *malloc_array_or_abort(size_t nmemb, size_t size) {
  * @return A pointer to the newly allocated memory.
  */
 void *realloc_increase(
-        void *data, size_t *nmemb, size_t size, size_t nmemb_inc) {
+    void *data,
+    size_t *nmemb,
+    size_t size,
+    size_t nmemb_inc
+) {
     const size_t new_nmemb = increase_alloc_size(*nmemb, size, nmemb_inc);
     if (new_nmemb <= 0) {
         fprintf(stderr, "Memory allocation failed (would exceed SIZE_MAX).\n");

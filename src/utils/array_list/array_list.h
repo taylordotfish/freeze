@@ -36,7 +36,10 @@ void array_list_init(ArrayList *self, size_t elem_size);
  *   without resizing.
  */
 void array_list_init_with_capacity(
-    ArrayList *self, size_t elem_size, size_t capacity);
+    ArrayList *self,
+    size_t elem_size,
+    size_t capacity
+);
 
 /**
  * Gets an item in the list.
