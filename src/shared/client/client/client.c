@@ -52,6 +52,8 @@
     } FreezeClient;
 #endif
 
+#define MAX_PATH_LEN 1024
+
 #define CHECK_FORGE(ref) do { \
     if (ref == 0) { \
         plugin_log_error( \
@@ -148,10 +150,9 @@ bool freeze_client_set_db_path(FreezeClient *self, const char *db_path) {
     CHECK_FORGE(lv2_atom_forge_urid(forge, uris->freeze_db_path));
     CHECK_FORGE(lv2_atom_forge_key(forge, uris->patch_value));
 
-    const size_t max_path_len = sizeof(self->forge_buffer) - 512;
     size_t path_len = strlen(db_path);
-    if (path_len > max_path_len) {
-        path_len = max_path_len;
+    if (path_len > MAX_PATH_LEN) {
+        path_len = MAX_PATH_LEN;
         plugin_log_warn(self->logger, "DB path is too long to send to UI.");
     }
 
@@ -237,7 +238,6 @@ static void freeze_client_on_single_event(
         freeze_client_on_command(self, obj);
         return;
     }
-
     plugin_log_warn(self->logger, "Received unexpected atom object type.");
 }
 
@@ -283,7 +283,6 @@ static void freeze_client_on_patch_set(
         FREEZE_CLIENT_CALLBACKS_CALL(&self->callbacks, ON_MEM_USED, mem_used);
         return;
     }
-
     plugin_log_warn(self->logger, "Unexpected property in patch:Set message.");
 }
 
@@ -308,7 +307,6 @@ static void freeze_client_on_command(
         FREEZE_CLIENT_CALLBACKS_CALL(&self->callbacks, ON_CLEAR_DB, NULL);
         return;
     }
-
     plugin_log_warn(self->logger, "Unexpected type in cmd:Command message.");
 }
 
