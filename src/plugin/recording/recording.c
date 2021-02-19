@@ -296,10 +296,11 @@ void recording_save_db(Recording *self, const char *path) {
 
     FILE *file = fopen(path, "ab+");
     fseek(file, 0, SEEK_SET);
-    if (recording_check_db_header(self, file)) {
+    if (recording_check_db_header(self, file) == READ_OK) {
         recording_save_db_fp(self, file);
     } else {
         plugin_log_trace(self->logger, "Creating new database: %s", path);
+        fseek(file, 0, SEEK_SET);
         recording_create_db_fp(self, file);
     }
     fclose(file);
