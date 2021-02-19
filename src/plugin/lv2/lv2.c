@@ -174,8 +174,11 @@ static void connect_port(LV2_Handle instance, uint32_t port, void *data) {
 }
 
 static bool check_atom(
-        FreezeLV2 *self, LV2_Atom *atom, LV2_URID expected_urid,
-        const char *name) {
+    FreezeLV2 *self,
+    LV2_Atom *atom,
+    LV2_URID expected_urid,
+    const char *name
+) {
     if (atom == NULL) {
         plugin_log_error(
             &self->logger, "Expected to receive \"%s\" atom.", name

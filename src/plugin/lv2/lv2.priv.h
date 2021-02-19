@@ -18,8 +18,11 @@ static void deactivate(LV2_Handle instance);
 static void connect_port(LV2_Handle instance, uint32_t port, void *data);
 
 static bool check_atom(
-    FreezeLV2 *self, LV2_Atom *atom, LV2_URID expected_urid,
-    const char *name);
+    FreezeLV2 *self,
+    LV2_Atom *atom,
+    LV2_URID expected_urid,
+    const char *name
+);
 
 static void update_position(FreezeLV2 *self, const LV2_Atom_Object *obj);
 

@@ -1,7 +1,7 @@
 Freeze
 ======
 
-Version 0.1.7
+Version 0.1.8
 
 Freeze is an LV2 plugin for freezing tracks in a digital audio workstation—that
 is, temporarily rendering a track as audio to reduce CPU/DSP load, as tracks
@@ -49,6 +49,14 @@ recorded audio.
 
 What’s new
 ----------
+
+Version 0.1.8:
+
+* **Important:** Fixed an issue that could cause the plugin to crash when
+  initialized.
+* **Important:** Fixed an issue with broken database saving. If the plugin
+  keeps crashing or working improperly after updating, try deleting and
+  re-adding each instance of the plugin.
 
 Version 0.1.7:
 

@@ -22,7 +22,7 @@
 <https://taylor.fish/plugins/freeze>
     a lv2:Plugin ;
     lv2:minorVersion 1 ;
-    lv2:microVersion 7 ;
+    lv2:microVersion 8 ;
     lv2:binary <build/freeze.so> ;
     rdfs:seeAlso <freeze.ttl> .
 
