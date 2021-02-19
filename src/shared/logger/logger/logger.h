@@ -11,19 +11,21 @@ typedef enum PluginLogLevel {
     PLUGIN_LOG_ERROR = 3,
 } PluginLogLevel;
 
-struct PluginLogger;
+typedef struct PluginLogger PluginLogger;
 
 typedef void (*PluginLogFunction)(
-    const struct PluginLogger *self, PluginLogLevel level, const char *fmt,
+    const PluginLogger *self,
+    PluginLogLevel level,
+    const char *fmt,
     va_list args
 );
 
-typedef struct PluginLogger {
+struct PluginLogger {
     PluginLogFunction log;
     void *data;
     const char *name;
     bool debug;
-} PluginLogger;
+};
 
 void plugin_log_trace(const PluginLogger *logger, const char *fmt, ...);
 

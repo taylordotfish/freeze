@@ -36,19 +36,21 @@
         PLUGIN_LOG_ERROR = 3,
     } PluginLogLevel;
 
-    struct PluginLogger;
+    typedef struct PluginLogger PluginLogger;
 
     typedef void (*PluginLogFunction)(
-        const struct PluginLogger *self, PluginLogLevel level, const char *fmt,
+        const PluginLogger *self,
+        PluginLogLevel level,
+        const char *fmt,
         va_list args
     );
 
-    typedef struct PluginLogger {
+    struct PluginLogger {
         PluginLogFunction log;
         void *data;
         const char *name;
         bool debug;
-    } PluginLogger;
+    };
 #endif
 
 void plugin_log_trace(const PluginLogger *logger, const char *fmt, ...) {
@@ -96,8 +98,11 @@ static const char *level_to_str(PluginLogLevel level) {
 }
 
 static void fallback_log_func(
-        const PluginLogger *logger, PluginLogLevel level, const char *fmt,
-        va_list args) {
+    const PluginLogger *logger,
+    PluginLogLevel level,
+    const char *fmt,
+    va_list args
+) {
     assert(logger != NULL);
     if (!logger->debug && level == PLUGIN_LOG_TRACE) {
         return;

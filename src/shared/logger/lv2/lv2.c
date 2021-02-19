@@ -29,7 +29,9 @@
 #endif
 
 static LV2_URID level_to_urid(
-        LV2_Log_Logger *lv2_logger, PluginLogLevel level) {
+    LV2_Log_Logger *lv2_logger,
+    PluginLogLevel level
+) {
     switch (level) {
         case PLUGIN_LOG_TRACE:
             return lv2_logger->Trace;
@@ -46,7 +48,11 @@ static LV2_URID level_to_urid(
 }
 
 static void lv2_log_printf(
-        LV2_Log_Logger *logger, LV2_URID type, const char *fmt, ...) {
+    LV2_Log_Logger *logger,
+    LV2_URID type,
+    const char *fmt,
+    ...
+) {
     va_list args;
     va_start(args, fmt);
     lv2_log_vprintf(logger, type, fmt, args);
@@ -54,8 +60,11 @@ static void lv2_log_printf(
 }
 
 static void lv2_log_func(
-        const PluginLogger *logger, PluginLogLevel level, const char *fmt,
-        va_list args) {
+    const PluginLogger *logger,
+    PluginLogLevel level,
+    const char *fmt,
+    va_list args
+) {
     if (level == PLUGIN_LOG_TRACE) {
         if (!logger->debug) {
             return;
@@ -73,7 +82,9 @@ static void lv2_log_func(
 }
 
 PluginLogger plugin_logger_from_lv2(
-        LV2_Log_Logger *lv2_logger, const char *name) {
+    LV2_Log_Logger *lv2_logger,
+    const char *name
+) {
     return (PluginLogger){
         .log = lv2_log_func,
         .data = lv2_logger,

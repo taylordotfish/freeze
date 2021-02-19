@@ -34,7 +34,9 @@
  * present but have NULL data.
  */
 static inline void *lv2_features_data(
-        const LV2_Feature * const *features, const char *uri) {
+    const LV2_Feature * const *features,
+    const char *uri
+) {
     if (features) {
         for (const LV2_Feature * const *f = features; *f; ++f) {
             if (!strcmp(uri, (*f)->URI)) {
@@ -68,7 +70,9 @@ static inline void *lv2_features_data(
  * @return NULL on success, otherwise the URI of this missing feature.
  */
 static inline const char *lv2_features_query(
-        const LV2_Feature * const *features, ...) {
+    const LV2_Feature * const *features,
+    ...
+) {
     va_list args;
     va_start(args, features);
 
