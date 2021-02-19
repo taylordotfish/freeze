@@ -49,14 +49,18 @@ static void atom_write_func(void *context, UNUSED const LV2_Atom *atom) {
     int mode = rand() % 2;
     printf("Setting mode to %d.\n", mode);
 
-    LV2_Atom_Forge_Frame frame;
+    LV2_Atom_Forge_Frame tuple_frame;
+    LV2_Atom_Forge_Frame object_frame;
+
     lv2_atom_forge_set_buffer(&forge, forge_buffer, sizeof(forge_buffer));
-    lv2_atom_forge_object(&forge, &frame, 0, uris.patch_Set);
+    lv2_atom_forge_tuple(&forge, &tuple_frame);
+    lv2_atom_forge_object(&forge, &object_frame, 0, uris.patch_Set);
     lv2_atom_forge_key(&forge, uris.patch_property);
     lv2_atom_forge_urid(&forge, uris.freeze_recording_mode);
     lv2_atom_forge_key(&forge, uris.patch_value);
     lv2_atom_forge_int(&forge, mode);
-    lv2_atom_forge_pop(&forge, &frame);
+    lv2_atom_forge_pop(&forge, &object_frame);
+    lv2_atom_forge_pop(&forge, &tuple_frame);
     freeze_client_on_event(client, (const LV2_Atom *)forge_buffer);
 }
 
