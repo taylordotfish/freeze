@@ -1,12 +1,12 @@
 static void recording_chunk_init(RecordingChunk *self);
 
-static void recording_chunk_clear(RecordingChunk *self);
-
 static float *alloc_samples(void);
 
 static inline bool recording_chunk_is_allocated(const RecordingChunk *self);
 
 static void recording_chunk_alloc(RecordingChunk *self);
+
+static void recording_chunk_destroy(RecordingChunk *self);
 
 // Prepares the chunk for writing and returns whether or not the chunk is the
 // most recently allocated chunk.
@@ -35,8 +35,6 @@ static ReadStatus recording_load_db_chunk(Recording *self, FILE *file);
 static ReadStatus recording_check_db_header(Recording *self, FILE *file);
 
 static bool recording_load_db_fp(Recording *self, FILE *file);
-
-static void recording_free_samples(Recording *self);
 
 static inline void write_int(
     FILE *file,

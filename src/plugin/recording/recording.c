@@ -97,12 +97,6 @@ static void recording_chunk_init(RecordingChunk *self) {
     };
 }
 
-static void recording_chunk_clear(RecordingChunk *self) {
-    free(self->samples_left);
-    free(self->samples_right);
-    recording_chunk_init(self);
-}
-
 static float *alloc_samples(void) {
     float *samples = malloc_array_or_abort(
         RECORDING_CHUNK_LENGTH, sizeof(float)
@@ -122,6 +116,11 @@ static void recording_chunk_alloc(RecordingChunk *self) {
     }
 }
 
+static void recording_chunk_destroy(RecordingChunk *self) {
+    free(self->samples_left);
+    free(self->samples_right);
+}
+
 
 
 /*************/
@@ -129,18 +128,18 @@ static void recording_chunk_alloc(RecordingChunk *self) {
 /*************/
 
 void recording_init(Recording *self) {
-    recording_clear(self);
-    self->logger = &plugin_logger_fallback;
-}
-
-void recording_clear(Recording *self) {
     self->cleared = true;
     self->saved_chunks = 0;
     self->allocated_chunks = 0;
     self->last_allocated = -1;
     for (size_t i = 0; i < RECORDING_NUM_CHUNKS; i++) {
-        recording_chunk_clear(&self->chunks[i]);
+        recording_chunk_init(&self->chunks[i]);
     }
+}
+
+void recording_clear(Recording *self) {
+    recording_destroy(self);
+    recording_init(self);
 }
 
 void recording_get(
@@ -417,14 +416,10 @@ void recording_set_logger(Recording *self, const PluginLogger *logger) {
     self->logger = logger;
 }
 
-static void recording_free_samples(Recording *self) {
-    for (size_t i = 0; i < RECORDING_NUM_CHUNKS; i++) {
-        recording_chunk_clear(&self->chunks[i]);
-    }
-}
-
 void recording_destroy(Recording *self) {
-    recording_free_samples(self);
+    for (size_t i = 0; i < RECORDING_NUM_CHUNKS; i++) {
+        recording_chunk_destroy(&self->chunks[i]);
+    }
 }
 
 
