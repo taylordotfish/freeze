@@ -260,6 +260,7 @@ static void run(LV2_Handle instance, uint32_t sample_count) {
 
     input.length = sample_count - current_frame;
     freeze_plugin_run(&self->plugin, input, output);
+    freeze_plugin_update_ui(&self->plugin);
     freeze_client_write(&self->client);
     lv2_atom_forge_pop(&self->notify_forge, &self->notify_frame);
 }

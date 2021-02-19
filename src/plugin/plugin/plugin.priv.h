@@ -8,8 +8,6 @@ static void freeze_plugin_run_playing(
     StereoPort output
 );
 
-static void maybe_update_ui(FreezePlugin *self);
-
 static void forward_samples(StereoSlice input, StereoPort output);
 
 static void on_client_get(void *context, UNUSED void *unused);

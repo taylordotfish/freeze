@@ -15,13 +15,15 @@ typedef struct FreezePlugin {
 
     FreezeClient *client;
     const PluginLogger *logger;
-    size_t samples_since_ui_msg;
+    size_t samples_since_ui_update;
 
     char *db_path;
-    bool db_path_changed: 1;
-    bool ui_initialized: 1;
-    bool active: 1;
-    bool playing: 1;
+    bool db_path_changed;
+    bool db_changed;
+
+    bool ui_initialized;
+    bool active;
+    bool playing;
 } FreezePlugin;
 
 void freeze_plugin_init(FreezePlugin *self, FreezeClient *client);
@@ -49,6 +51,8 @@ void freeze_plugin_run(
     StereoSlice input,
     StereoPort output
 );
+
+void freeze_plugin_update_ui(FreezePlugin *self);
 
 void freeze_plugin_set_logger(FreezePlugin *self, const PluginLogger *logger);
 

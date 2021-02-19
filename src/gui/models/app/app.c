@@ -36,8 +36,8 @@
         // Changes are tracked for performance optimizations -- when updating
         // the GUI, we can skip certain parts of the update if we know the
         // data hasn't changed.
-        bool path_changed: 1;
-        bool memory_used_changed: 1;
+        bool path_changed;
+        bool memory_used_changed;
     } AppModel;
 #endif
 
