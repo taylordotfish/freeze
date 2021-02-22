@@ -28,7 +28,10 @@ After inserting the Freeze instance, open the GUI and click the Record button.
 Then, in your project, play all sections where the track emits audio. This
 ensures that Freeze can actually capture the audio that needs to be frozen. It
 is not necessary to play sections where the track is silent, even if other
-tracks aren’t.
+tracks aren’t. It’s okay if you experience xruns during this process—they
+should disappear or be reduced once completing the steps below, and the
+recorded audio itself should be perfectly intact (if you find that this isn’t
+the case, please file an issue with details about your audio setup).
 
 After all sections have been played back, click the Stop button in the GUI.
 The “Memory Used” text at the bottom of the GUI will show you how much memory
@@ -45,6 +48,17 @@ plugins that occur before Freeze and play back the sections of the project that
 have changed. If many sections have now become silent, it may be more
 convenient to open Freeze’s GUI and click the Clear button, which clears all
 recorded audio.
+
+
+Real-time safety
+----------------
+
+Freeze is hard-real-time-safe while in playback mode, but not while recording
+audio. Thus, you may experience (more) xruns while Freeze is recording, but
+they should disappear once Freeze is put back into playback mode and plugins
+that appear earlier in the effect chain are disabled (and, as mentioned
+earlier, Freeze can (and should!) be used on tracks that are already causing
+xruns).
 
 
 What’s new
