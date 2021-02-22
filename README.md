@@ -46,8 +46,8 @@ were active, while being much less resource intensive.
 If you change something in the track and need to re-freeze, enable all of the
 plugins that occur before Freeze and play back the sections of the project that
 have changed. If many sections have now become silent, it may be more
-convenient to open Freeze’s GUI and click the Clear button, which clears all
-recorded audio.
+convenient to click the Clear button in the GUI, which clears all recorded
+audio.
 
 
 Real-time safety
