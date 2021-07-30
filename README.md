@@ -1,7 +1,7 @@
 Freeze
 ======
 
-Version 0.2.0
+Version 0.2.1
 
 Freeze is an LV2 plugin for freezing tracks in a digital audio workstation—that
 is, temporarily rendering a track as audio to reduce CPU/DSP load, as tracks
@@ -48,6 +48,10 @@ plugins that occur before Freeze and play back the sections of the project that
 have changed. If many sections have now become silent, it may be more
 convenient to click the Clear button in the GUI, which clears all recorded
 audio.
+
+**Note:** Currently, copying/cloning instances of Freeze in Ardour (and perhaps
+other DAWs) causes issues—until this is fixed, as a workaround, add each
+instance of Freeze individually instead of copying/cloning.
 
 
 Real-time safety
