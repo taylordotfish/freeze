@@ -52,8 +52,8 @@ LDLIBS =
 ifeq ($(DEBUG), 1)
 	CFLAGS += -Og -ggdb -DFREEZE_DEBUG=1
 else
-	CFLAGS += -Ofast -flto -fwhole-program -DNDEBUG
-	LDFLAGS += -Ofast -flto
+	CFLAGS += -O3 -flto -DNDEBUG
+	LDFLAGS += -O3 -flto
 endif
 
 ifeq ($(STANDALONE), 1)
